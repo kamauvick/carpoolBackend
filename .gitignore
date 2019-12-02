@@ -3,5 +3,5 @@ virtual
 .env
 .idea
 .vscode
-/pycache
+/__pycache__/
 start.sh
