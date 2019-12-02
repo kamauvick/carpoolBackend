@@ -64,7 +64,7 @@ class RequestBoard(models.Model):
     def __str__(self):
         return f'{self.demand.passanger.user.username} request to {self.offer.driver.user.username}'
 
-class TripDetails:
+class TripDetail:
     request = models.ForeignKey(RequestBoard,on_delete=models.PROTECT)
     offer = models.ForeignKey(Offer ,on_delete=models.PROTECT)
     demand = models.ForeignKey(Demand ,on_delete=models.PROTECT)
@@ -75,3 +75,15 @@ class TripDetails:
 
     def __str__(self):
         return f"{self.offer.driver.user.username}'s trip to {self.offer.destination.name}"
+
+class Trip:
+    offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
+    start_time = models.TimeField()
+    stop_time = models.TimeField()
+
+    class Meta:
+        db_name ="trip"
+        ordering=['offer']
+
+    def __str__(self):
+        return f'trip to {self.offer.destination}'
