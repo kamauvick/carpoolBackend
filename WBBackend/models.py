@@ -36,8 +36,8 @@ class Location(models.Model):
 
 class Offer(models.Model):
     driver = models.ForeignKey('WBBackend.Profile', related_name='driver_profile', on_delete=models.PROTECT)
-    origin = models.ForeignKey('WBBackend.Location', related_name='trip_origin', on_delete=models.PROTECT)
-    destination = models.ForeignKey('WBBackend.Location', related_name='trip_destination', on_delete=models.PROTECT)
+    origin = models.ForeignKey('WBBackend.Location', related_name='offer_origin', on_delete=models.PROTECT)
+    destination = models.ForeignKey('WBBackend.Location', related_name='offer_destination', on_delete=models.PROTECT)
     available_seats = models.IntegerField()
     departure_time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -47,8 +47,8 @@ class Offer(models.Model):
 
 class Demand(models.Model):
     passenger = models.ForeignKey('WBBackend.Profile', related_name='trip_passenger', on_delete=models.PROTECT)
-    origin = models.ForeignKey('WBBackend.Location', related_name='trip_origin', on_delete=models.PROTECT)
-    destination = models.ForeignKey('WBBackend.Location', related_name='trip_destination', on_delete=models.PROTECT)
+    origin = models.ForeignKey('WBBackend.Location', related_name='demand_origin', on_delete=models.PROTECT)
+    destination = models.ForeignKey('WBBackend.Location', related_name='demand_destination', on_delete=models.PROTECT)
     available_seats = models.IntegerField()
     departure_time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
