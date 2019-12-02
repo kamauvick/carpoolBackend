@@ -52,3 +52,14 @@ class Demand(models.Model):
     available_seats = models.IntegerField()
     departure_time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+class RequestBoard(models.Model):
+    offer = models.ForeignKey(Offer, related_name='requests', on_delete=models.CASCADE)
+    accepted = models.BooleanField(default=False)
+    demand = models.ForeignKey(Demand, related_name='my_request', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table="board_request"
+
+    def __str__(self):
+        return f'{self.demand.passanger.user.username} request to {self.offer.driver.user.username}'
