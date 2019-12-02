@@ -45,5 +45,10 @@ class Offer(models.Model):
     is_ended = models.BooleanField(default=False)
 
 
-
-
+class Demand(models.Model):
+    passenger = models.ForeignKey('WBBackend.Profile', related_name='trip_passenger', on_delete=models.PROTECT)
+    origin = models.ForeignKey('WBBackend.Location', related_name='trip_origin', on_delete=models.PROTECT)
+    destination = models.ForeignKey('WBBackend.Location', related_name='trip_destination', on_delete=models.PROTECT)
+    available_seats = models.IntegerField()
+    departure_time = models.TimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
