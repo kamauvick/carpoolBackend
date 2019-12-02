@@ -1,0 +1,7 @@
+venv
+virtual
+.env
+.idea
+.vscode
+/pycache
+start.sh
