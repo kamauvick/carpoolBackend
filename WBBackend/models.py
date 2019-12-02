@@ -25,3 +25,25 @@ class Profile(models.Model):
 
     class Meta:
         db_table = 'users'
+
+
+class Location(models.Model):
+    name = models.CharField(max_length=200)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    distance = models.IntegerField()
+
+
+class Offer(models.Model):
+    driver = models.ForeignKey('WBBackend.Profile', related_name='driver_profile', on_delete=models.PROTECT)
+    origin = models.ForeignKey('WBBackend.Location', related_name='trip_origin', on_delete=models.PROTECT)
+    destination = models.ForeignKey('WBBackend.Location', related_name='trip_destination', on_delete=models.PROTECT)
+    available_seats = models.IntegerField()
+    departure_time = models.TimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_full = models.BooleanField(default=False)
+    is_ended = models.BooleanField(default=False)
+
+
+
+
