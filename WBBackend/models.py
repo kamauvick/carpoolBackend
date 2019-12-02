@@ -87,3 +87,12 @@ class Trip:
 
     def __str__(self):
         return f'trip to {self.offer.destination}'
+
+class TripChat:
+    user = models.ForeignKey(Profile, on_delete = models.PROTECT)
+    message = models.TextField()
+    offer = models.ForeignKey(Offer , on_delete = models.PROTECT)
+    time =models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{user.username} message'
