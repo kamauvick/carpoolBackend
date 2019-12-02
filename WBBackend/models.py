@@ -63,3 +63,15 @@ class RequestBoard(models.Model):
 
     def __str__(self):
         return f'{self.demand.passanger.user.username} request to {self.offer.driver.user.username}'
+
+class TripDetails:
+    request = models.ForeignKey(RequestBoard,on_delete=models.PROTECT)
+    offer = models.ForeignKey(Offer ,on_delete=models.PROTECT)
+    demand = models.ForeignKey(Demand ,on_delete=models.PROTECT)
+
+    class Meta:
+        db_name='trip_details'
+        ordering =['offer']
+
+    def __str__(self):
+        return f"{self.offer.driver.user.username}'s trip to {self.offer.destination.name}"
