@@ -8,3 +8,4 @@ start.sh
 WBBackend/migrations/__pycache__/
 WBBackend/__pycache__/
 WBCarPoolApp/__pycache__/settings.cpython-36.pyc
+WBCarPoolApp/__pycache__/
