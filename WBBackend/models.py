@@ -52,3 +52,47 @@ class Demand(models.Model):
     available_seats = models.IntegerField()
     departure_time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+class RequestBoard(models.Model):
+    offer = models.ForeignKey(Offer, related_name='requests', on_delete=models.CASCADE)
+    accepted = models.BooleanField(default=False)
+    demand = models.ForeignKey(Demand, related_name='my_request', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table="board_request"
+
+    def __str__(self):
+        return f'{self.demand.passanger.user.username} request to {self.offer.driver.user.username}'
+
+class TripDetail:
+    request = models.ForeignKey(RequestBoard,on_delete=models.PROTECT)
+    offer = models.ForeignKey(Offer ,on_delete=models.PROTECT)
+    demand = models.ForeignKey(Demand ,on_delete=models.PROTECT)
+
+    class Meta:
+        db_name='trip_details'
+        ordering =['offer']
+
+    def __str__(self):
+        return f"{self.offer.driver.user.username}'s trip to {self.offer.destination.name}"
+
+class Trip:
+    offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
+    start_time = models.TimeField()
+    stop_time = models.TimeField()
+
+    class Meta:
+        db_name ="trip"
+        ordering=['offer']
+
+    def __str__(self):
+        return f'trip to {self.offer.destination}'
+
+class TripChat:
+    user = models.ForeignKey(Profile, on_delete = models.PROTECT)
+    message = models.TextField()
+    offer = models.ForeignKey(Offer , on_delete = models.PROTECT)
+    time =models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{user.username} message'

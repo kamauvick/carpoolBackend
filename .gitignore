@@ -1,9 +1,10 @@
+*__pycache__
+*pyc
 venv
 virtual
 .env
 .idea
 .vscode
-/__pycache__/
 start.sh
 WBBackend/migrations/__pycache__/
 WBBackend/__pycache__/
