@@ -25,7 +25,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
-
+DEBUG=config('DEBUG')
 # Application definition
 
 INSTALLED_APPS = [
@@ -36,7 +36,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'WBBackend.apps.WbbackendConfig',
+    'rest_framework',
+    'django_filters',
+    'coreapi',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
