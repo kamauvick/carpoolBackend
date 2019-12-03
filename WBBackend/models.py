@@ -54,8 +54,16 @@ class Demand(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class RequestBoard(models.Model):
+    PENDING=' PE '
+    ACCEPTED=' AC '
+    DENIDE=' DE '
+    REQUEST_STATUS=[
+    (PENDING,"Pending"),
+    (ACCEPTED,"Accepted"),
+    (DENIDE,"Denied"),
+    ]
     offer = models.ForeignKey(Offer, related_name='requests', on_delete=models.CASCADE)
-    accepted = models.BooleanField(default=False)
+    status = models.CharField(choices=REQUEST_STATUS,max_length=2)
     demand = models.ForeignKey(Demand, related_name='my_request', on_delete=models.CASCADE)
 
     class Meta:
@@ -64,31 +72,31 @@ class RequestBoard(models.Model):
     def __str__(self):
         return f'{self.demand.passanger.user.username} request to {self.offer.driver.user.username}'
 
-class TripDetail:
+class TripDetail(models.Model):
     request = models.ForeignKey(RequestBoard,on_delete=models.PROTECT)
     offer = models.ForeignKey(Offer ,on_delete=models.PROTECT)
     demand = models.ForeignKey(Demand ,on_delete=models.PROTECT)
 
     class Meta:
-        db_name='trip_details'
+        db_table='trip_details'
         ordering =['offer']
 
     def __str__(self):
         return f"{self.offer.driver.user.username}'s trip to {self.offer.destination.name}"
 
-class Trip:
+class Trip(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
     start_time = models.TimeField()
     stop_time = models.TimeField()
 
     class Meta:
-        db_name ="trip"
+        db_table ="trip"
         ordering=['offer']
 
     def __str__(self):
         return f'trip to {self.offer.destination}'
 
-class TripChat:
+class TripChat(models.Model):
     user = models.ForeignKey(Profile, on_delete = models.PROTECT)
     message = models.TextField()
     offer = models.ForeignKey(Offer , on_delete = models.PROTECT)
