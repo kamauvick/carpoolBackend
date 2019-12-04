@@ -5,6 +5,7 @@ virtual
 .env
 .idea
 .vscode
+*migrations/
 start.sh
 WBBackend/migrations/
 WBBackend/migrations/__pycache__/
