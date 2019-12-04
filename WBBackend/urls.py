@@ -12,5 +12,6 @@ router.register(r'devices', FCMDeviceViewSet)
 urlpatterns = [
     path('main/' ,views.home, name='home'),
     path('offers/', views.OffersList.as_view()),
+    path('demands/', views.DemandsList.as_view()),
     re_path(r'^', include(router.urls))
 ]

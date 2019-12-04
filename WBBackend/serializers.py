@@ -6,3 +6,10 @@ class OfferSerializer(serializers.ModelSerializer):
         model = Offer
         fields = ('driver','origin','destination','available_seats',
                 'departure_time','created_at', 'is_full','is_ended')
+
+
+class DemandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Demand
+        fields = ('passenger','origin','destination','available_seats',
+                'departure_time','created_at')

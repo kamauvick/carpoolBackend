@@ -22,3 +22,10 @@ class OffersList(APIView):
         return Response(serializers.data)
 
 
+class DemandsList(APIView):
+    def get(self, request, format=None):
+        all_demands = Demand.objects.all()
+        serializers = DemandSerializer(all_demands, many=True)
+        return Response(serializers.data)
+
+
