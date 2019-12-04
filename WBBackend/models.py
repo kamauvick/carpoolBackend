@@ -76,13 +76,13 @@ class TripDetail:
     def __str__(self):
         return f"{self.offer.driver.user.username}'s trip to {self.offer.destination.name}"
 
-class Trip:
+class Trip(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
     start_time = models.TimeField()
     stop_time = models.TimeField()
 
     class Meta:
-        db_name ="trip"
+        db_table ="trip"
         ordering=['offer']
 
     def __str__(self):
@@ -96,3 +96,18 @@ class TripChat:
 
     def __str__(self):
         return f'{user.username} message'
+
+class Survey:
+    user = models.ForeignKey(Profile, on_delete=models.PROTECT)
+    question = models.CharField(max_length=20)
+    response = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f'{user.username}'
+
+class Emmissions:
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    saved_emmissions = models.FloatField()
+
+    def __str__(self):
+        return f'saved {saved_emmissions} emmissions'
