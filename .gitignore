@@ -5,4 +5,5 @@ virtual
 .env
 .idea
 .vscode
+*migrations/
 start.sh
