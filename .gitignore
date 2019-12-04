@@ -8,3 +8,4 @@ virtual
 *migrations/
 start.sh
 WBBackend/migrations/
+.gitignore
