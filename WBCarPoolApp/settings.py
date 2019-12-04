@@ -39,7 +39,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'coreapi',
+    'fcm_django',
 ]
+FCM_DJANGO_SETTINGS = {
+    "FCM_SERVER_KEY": config('FCM_SERVER_KEY')
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
