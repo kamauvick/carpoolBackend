@@ -84,7 +84,13 @@ WSGI_APPLICATION = 'WBCarPoolApp.wsgi.application'
 
 
 DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URI'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+    }
 }
 
 # Password validation
