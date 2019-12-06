@@ -8,8 +8,7 @@ from rest_framework.routers import DefaultRouter
 # Switch to FCMDeviceAuthorizedViewSet when authentication is ready
 router = DefaultRouter()
 router.register(r'devices', FCMDeviceViewSet)
-
+router.register(r'request_board', views.RequestBoardViewSet) 
 urlpatterns = [
-    path('main/' ,views.home, name='home'),
     re_path(r'^', include(router.urls))
 ]
