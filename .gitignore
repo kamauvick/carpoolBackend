@@ -7,3 +7,4 @@ virtual
 .vscode
 *migrations/
 start.sh
+WBBackend/migrations/

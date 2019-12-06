@@ -1,12 +1,24 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from rest_framework.viewsets import ModelViewSet
 
+from .models import *
 from .serializers import *
-
-from rest_framework import mixins, permissions
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework import filters
 from rest_framework.exceptions import ValidationError
+
+
+# Create your views here.
+
+
+class ProfileView(ModelViewSet):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
+
+    def get_queryset(self):
+        profile = self.request.user.profile
+        if self.action in ['list', 'retrieve']:
+            return [profile]
+
+    def get_object(self):
+        return self.request.user.profile
 
 
 class RequestBoardViewSet(ModelViewSet):
