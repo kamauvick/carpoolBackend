@@ -3,7 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 from .models import *
 from .serializers import *
 from rest_framework.exceptions import ValidationError
-
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -24,7 +24,7 @@ class ProfileView(ModelViewSet):
 class RequestBoardViewSet(ModelViewSet):
     queryset = RequestBoard.objects.all()
     serializer_class = RequestBoardSerializer
-    # permission_classes =
+    # permission_classes =[IsAuthenticated]
 
     def get_queryset(self):
         '''
