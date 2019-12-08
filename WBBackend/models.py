@@ -90,8 +90,8 @@ class TripDetail(models.Model):
 
 class Trip(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
-    start_time = models.TimeField()
-    stop_time = models.TimeField()
+    start_time = models.TimeField(null=True)
+    stop_time = models.TimeField(null=True)
 
     class Meta:
         db_table = "trip"
