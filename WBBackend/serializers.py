@@ -48,3 +48,8 @@ class RequestBoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = RequestBoard
         exclude = ("")
+
+class TripDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TripDetail
+        exclude = ("")

@@ -5,6 +5,8 @@ from .serializers import *
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 
+from django.http import JsonResponse
+from rest_framework.response import Response
 # Create your views here.
 
 
@@ -65,4 +67,26 @@ class RequestBoardViewSet(ModelViewSet):
         '''
         This function is ment to allow cancling a request by deleteing a request
         '''
+        return self.destroy(request, *args, **kwargs)
+
+
+class TripDetailApiView(ModelViewSet):
+    queryset = TripDetail.objects.all()
+    serializer_class = TripDetailsSerializer
+
+    def get_queryset(self):
+        print("*********** 1 ************")
+        offer_id = self.request.query_params.get('offer')
+
+        if offer_id:
+            print("*********** 2 ************")
+            offer_id = int(offer_id)
+            return TripDetail.objects.filter(offer__id=offer_id).all()
+
+    def retrive(self, request, *args, **kwargs):
+        error_message = {"status": status.HTTP_400_BAD_REQUEST,
+                         "error": "Please pass an offer id query param", "example": "{'offer':ID}"}
+        return Response(error_message, safe=False)
+
+    def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)

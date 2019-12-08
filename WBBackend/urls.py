@@ -10,12 +10,15 @@ router.register(r'devices', FCMDeviceViewSet)
 from rest_framework.routers import SimpleRouter
 
 from .views import (
-    ProfileView,RequestBoardViewSet
+    ProfileView ,
+    RequestBoardViewSet,
+    TripDetailApiView,
 )
 
 router = SimpleRouter()
 router.register('profile', ProfileView)
 router.register(r'request_board', RequestBoardViewSet)
+router.register('trip_detail', TripDetailApiView)
 urlpatterns = [
     # path('main/' ,views.home, name='home'),
     re_path(r'^', include(router.urls)),
