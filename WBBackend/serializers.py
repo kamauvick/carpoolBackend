@@ -53,3 +53,8 @@ class TripDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = TripDetail
         exclude = ("")
+
+class TripSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trip
+        exclude = ("")

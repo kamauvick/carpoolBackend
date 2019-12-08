@@ -13,12 +13,14 @@ from .views import (
     ProfileView ,
     RequestBoardViewSet,
     TripDetailApiView,
+    TripApiView
 )
 
 router = SimpleRouter()
 router.register('profile', ProfileView)
 router.register(r'request_board', RequestBoardViewSet)
 router.register('trip_detail', TripDetailApiView)
+router.register('trip', TripApiView)
 urlpatterns = [
     # path('main/' ,views.home, name='home'),
     re_path(r'^', include(router.urls)),

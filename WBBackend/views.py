@@ -26,7 +26,7 @@ class ProfileView(ModelViewSet):
 class RequestBoardViewSet(ModelViewSet):
     queryset = RequestBoard.objects.all()
     serializer_class = RequestBoardSerializer
-    # permission_classes =[IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         '''
@@ -90,3 +90,17 @@ class TripDetailApiView(ModelViewSet):
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class TripApiView(ModelViewSet):
+    queryset = Trip.objects.all()
+    serializer_class = TripSerializer
+
+    def get_queryset(self):
+        offer_id = self.request.query_params.get('offer')
+        if offer_id:
+            offer_id = int(offer_id)
+            print("*********** 1 ************")
+            return Trip.objects.filter(offer__id=offer_id).all()
+        profile = self.request.user.profile
+        return Trip.objects.filter(offer__driver=profile).all()
