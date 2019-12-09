@@ -36,16 +36,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'WBBackend.apps.WbbackendConfig',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'WBBackend.apps.WbbackendConfig',
     'django_filters',
     'coreapi',
     'fcm_django',
-    'allauth',
-    'allauth.account',
-    'rest_auth',
-    'rest_framework.authtoken',
-    'rest_auth.registration',
 ]
 FCM_DJANGO_SETTINGS = {
     "FCM_SERVER_KEY": config('FCM_SERVER_KEY')
@@ -53,8 +55,18 @@ FCM_DJANGO_SETTINGS = {
 
 SITE_ID = 1
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
 }
 
 AUTHENTICATION_BACKENDS = (
@@ -83,6 +95,8 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                # 'social_django.context_processors.backends',
+                # 'social_django.context_processors.login_redirect',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
