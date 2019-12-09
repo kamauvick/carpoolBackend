@@ -1,8 +1,9 @@
+
 from rest_framework.viewsets import ModelViewSet
 
 from .models import *
 from .serializers import *
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError,MethodNotAllowed
 from rest_framework.permissions import IsAuthenticated
 
 from django.http import JsonResponse
@@ -73,6 +74,7 @@ class RequestBoardViewSet(ModelViewSet):
 class TripDetailApiView(ModelViewSet):
     queryset = TripDetail.objects.all()
     serializer_class = TripDetailsSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         print("*********** 1 ************")
@@ -85,16 +87,19 @@ class TripDetailApiView(ModelViewSet):
 
     def retrive(self, request, *args, **kwargs):
         error_message = {"status": status.HTTP_400_BAD_REQUEST,
-                         "error": "Please pass an offer id query param", "example": "{'offer':ID}"}
+                         "error": "Please pass an offer id query param",
+                         "example": "{'offer':ID}"}
         return Response(error_message, safe=False)
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 class TripApiView(ModelViewSet):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         offer_id = self.request.query_params.get('offer')
@@ -104,3 +109,7 @@ class TripApiView(ModelViewSet):
             return Trip.objects.filter(offer__id=offer_id).all()
         profile = self.request.user.profile
         return Trip.objects.filter(offer__driver=profile).all()
+
+    def post(self, request, *args, **kwargs):
+        raise MethodNotAllowed(status.HTTP_400_METHOD_NOT_ALLOWED,detail="Post request is not allowed in this field")
+        # return create(self, *args, **kwargs)
