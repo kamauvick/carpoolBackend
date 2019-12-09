@@ -1,12 +1,11 @@
 from django.urls import re_path, include
 
 # FCM NOTIFICATIONS
-from fcm_django.api.rest_framework import FCMDeviceViewSet
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 from rest_framework.routers import DefaultRouter
 
-# Switch to FCMDeviceAuthorizedViewSet when authentication is ready
+# Switch to FCMDeviceViewSet when authentication is not nedeed
 router = DefaultRouter()
-router.register(r'devices', FCMDeviceViewSet)
 from rest_framework.routers import SimpleRouter
 
 from .views import (
@@ -21,6 +20,7 @@ router.register('profile', ProfileView)
 router.register(r'request_board', RequestBoardViewSet)
 router.register('trip_detail', TripDetailApiView)
 router.register('trip', TripApiView)
+router.register(r'devices', FCMDeviceAuthorizedViewSet)
 urlpatterns = [
     # path('main/' ,views.home, name='home'),
     re_path(r'^', include(router.urls)),
