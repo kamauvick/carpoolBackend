@@ -1,8 +1,16 @@
-from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import User
+from django.http import JsonResponse
 from rest_framework.viewsets import ModelViewSet
 
+from . import notification
 from .models import Profile
 from .serializers import ProfileSerializer
+
+
+def home(request):
+    user = User.objects.get(pk=1)
+    notification.request_notifications(user, "Hey Vick", "This is a test")
+    return JsonResponse({'user': user.username})
 
 
 # Create your views here.
@@ -10,6 +18,7 @@ from .serializers import ProfileSerializer
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
     # permission_classes = (IsAuthenticated)
 
     def get_queryset(self):
