@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError,MethodNotAllowed
 from .models import *
 from rest_framework import status
 
@@ -55,6 +55,8 @@ class TripDetailsSerializer(serializers.ModelSerializer):
         exclude = ("")
 
 class TripSerializer(serializers.ModelSerializer):
+    def create(self,validated_data):
+        raise MethodNotAllowed(status.HTTP_405_METHOD_NOT_ALLOWED,detail="Post request is not allowed in this field")
     class Meta:
         model = Trip
         exclude = ("")
