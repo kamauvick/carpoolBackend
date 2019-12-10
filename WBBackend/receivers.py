@@ -5,13 +5,25 @@ from . import notification
 
 
 def update_offer_details(instance):
-    if instance.staus == "AC":
+    if instance.status == "AC":
         available_seats = instance.offer.seats_needed
-        trip_details = TripDetail.objects.filter(offer=instance.offer).all()
+        trip_details = TripDetail.objects.filter(offer=instance.offer).all().count()
         if int(available_seats) == int(trip_details):
             instance.is_full = True
             instance.save()
 
+def get_passangers(instance):
+    receivers = []
+    trip_details= TripDetail.objects.filter(offer= instance.offer).all()
+    for i in trip_details:
+        receivers.append(i.demand.passenger.user)
+    print(receivers)
+    driver = instance.offer.driver.user
+    if instance.user.user != driver:
+        receivers.append(driver)
+    if instance.user.user in receivers:
+        receivers.remove(instance.user.user)
+    return receivers
 
 @receiver(post_save, sender=RequestBoard)
 def request_board(sender, instance, **kwargs):
@@ -59,3 +71,10 @@ def update_trip(sender, created, instance, **kwargs):
     if exsists == None:
         print('We have created it *********************')
         Trip.objects.create(offer=instance)
+
+@receiver(post_save,  sender = TripChat)
+def notify_chat(sender, instance, **kwargs):
+    receivers = get_passangers(instance)
+    notification.chat_notification(receivers,f"Message From {instance.user.first_name.capitalize()}",instance.message.capitalize())
+
+    print("**************",receivers)
