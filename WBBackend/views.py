@@ -113,3 +113,15 @@ class TripApiView(ModelViewSet):
     def post(self, request, *args, **kwargs):
         raise MethodNotAllowed(status.HTTP_400_METHOD_NOT_ALLOWED,detail="Post request is not allowed in this field")
         # return create(self, *args, **kwargs)
+
+class TripChatApiView(ModelViewSet):
+    queryset = TripChat.objects.all()
+    serializer_class = TripChatSerializer
+    permission_classes = [IsAuthenticated]
+
+    def retrieve(self,request,*args,**kwargs):
+        print(request.user.profile)
+        return []
+    def post(self,request ,*args ,**kwargs):
+        mtu = self.request.user.profile
+        return self.create(request, mtu,*args,**kwargs)
