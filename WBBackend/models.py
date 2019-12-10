@@ -108,4 +108,4 @@ class TripChat(models.Model):
     time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{user.user.username} message'
+        return f"{self.user.user.username}'s message"
