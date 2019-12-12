@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, MethodNotAllowed
 from .models import *
 from rest_framework import status
 
@@ -47,4 +47,37 @@ class RequestBoardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RequestBoard
-        exclude = ""
+        exclude = ("")
+
+
+class TripDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TripDetail
+        exclude = ("")
+
+
+class TripSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        raise MethodNotAllowed(status.HTTP_405_METHOD_NOT_ALLOWED,
+                               detail="Post request is not allowed in this field")
+
+    class Meta:
+        model = Trip
+        exclude = ("")
+
+
+class TripChatSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        user_profile = validated_data.get('user')
+        offer = validated_data.get('offer')
+        trip_details = TripDetail.objects.filter(
+            offer=offer, demand__passenger=user_profile).first()
+        if trip_details:
+            return TripChat.objects.create(**validated_data)
+        raise ValidationError(
+            detail="This user is not allowed to send message for he is not part of this trip")
+
+    class Meta:
+        model = TripChat
+        exclude = ("")
+

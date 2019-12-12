@@ -90,8 +90,8 @@ class TripDetail(models.Model):
 
 class Trip(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
-    start_time = models.TimeField()
-    stop_time = models.TimeField()
+    start_time = models.TimeField(null=True)
+    stop_time = models.TimeField(null=True)
 
     class Meta:
         db_table = "trip"
@@ -105,7 +105,7 @@ class TripChat(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.PROTECT)
     message = models.TextField()
     offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{user.user.username} message'
+        return f"{self.user.user.username}'s message"
