@@ -35,12 +35,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 class RequestBoardSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
-        exsist = RequestBoard.objects.filter(
+        exist = RequestBoard.objects.filter(
             demand=validated_data['demand']).first()
-        if exsist:
-            serializer = RequestBoardSerializer(exsist)
+        if exist:
+            serializer = RequestBoardSerializer(exist)
             details = {"status": status.HTTP_400_BAD_REQUEST,
-                       "message": "User already has an exsisting request.Cancel requet to make another",
+                       "message": "User already has an existing request.Cancel requet to make another",
                        "request_board": serializer.data}
             raise ValidationError(detail=details)
         return RequestBoard.objects.create(**validated_data)
@@ -80,3 +80,4 @@ class TripChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = TripChat
         exclude = ("")
+

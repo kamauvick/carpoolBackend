@@ -1,7 +1,7 @@
-
+from django.http import JsonResponse
 from rest_framework.viewsets import ModelViewSet
 
-from .models import *
+from . import notification
 from .serializers import *
 from rest_framework.exceptions import ValidationError,MethodNotAllowed
 from rest_framework.permissions import IsAuthenticated
@@ -9,11 +9,13 @@ from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from rest_framework.response import Response
 # Create your views here.
-
+from .serializers import ProfileSerializer
 
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+    # permission_classes = (IsAuthenticated)
 
     def get_queryset(self):
         profile = self.request.user.profile
@@ -52,22 +54,22 @@ class RequestBoardViewSet(ModelViewSet):
         return RequestBoard.objects.all()
 
     def post(self, request, *args, **kwargs):
-        '''
+        """
         This function is ment to allow creating of a request board
-        '''
+        """
         profile = request.user.profile
         return self.create(request, profile, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        '''
+        """
         This function allows drivers to update the request status
-        '''
+        """
         return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        '''
+        """
         This function is ment to allow cancling a request by deleteing a request
-        '''
+        """
         return self.destroy(request, *args, **kwargs)
 
 
