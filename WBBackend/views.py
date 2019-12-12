@@ -3,14 +3,12 @@ from rest_framework.viewsets import ModelViewSet
 
 from . import notification
 from .serializers import *
-from .serializers import ProfileSerializer
+from rest_framework.exceptions import ValidationError,MethodNotAllowed
+from rest_framework.permissions import IsAuthenticated
 
-
-def home(request):
-    user = User.objects.get(pk=1)
-    notification.request_notifications(user, "Hey Vick", "This is a test")
-    return JsonResponse({'user': user.username})
-
+from django.http import JsonResponse
+from rest_framework.response import Response
+# Create your views here.
 
 # Create your views here.
 
@@ -18,7 +16,7 @@ class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
-    # permission_classes = (IsAuthenticated)
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         profile = self.request.user.profile
@@ -33,7 +31,7 @@ class RequestBoardViewSet(ModelViewSet):
     queryset = RequestBoard.objects.all()
     serializer_class = RequestBoardSerializer
 
-    # permission_classes =
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         '''
@@ -75,3 +73,59 @@ class RequestBoardViewSet(ModelViewSet):
         This function is ment to allow cancling a request by deleteing a request
         """
         return self.destroy(request, *args, **kwargs)
+
+
+class TripDetailApiView(ModelViewSet):
+    queryset = TripDetail.objects.all()
+    serializer_class = TripDetailsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        print("*********** 1 ************")
+        offer_id = self.request.query_params.get('offer')
+
+        if offer_id:
+            print("*********** 2 ************")
+            offer_id = int(offer_id)
+            return TripDetail.objects.filter(offer__id=offer_id).all()
+
+    def retrive(self, request, *args, **kwargs):
+        error_message = {"status": status.HTTP_400_BAD_REQUEST,
+                         "error": "Please pass an offer id query param",
+                         "example": "{'offer':ID}"}
+        return Response(error_message, safe=False)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+
+class TripApiView(ModelViewSet):
+    queryset = Trip.objects.all()
+    serializer_class = TripSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        offer_id = self.request.query_params.get('offer')
+        if offer_id:
+            offer_id = int(offer_id)
+            print("*********** 1 ************")
+            return Trip.objects.filter(offer__id=offer_id).all()
+        profile = self.request.user.profile
+        return Trip.objects.filter(offer__driver=profile).all()
+
+    def post(self, request, *args, **kwargs):
+        raise MethodNotAllowed(status.HTTP_400_METHOD_NOT_ALLOWED,detail="Post request is not allowed in this field")
+        # return create(self, *args, **kwargs)
+
+class TripChatApiView(ModelViewSet):
+    queryset = TripChat.objects.all()
+    serializer_class = TripChatSerializer
+    permission_classes = [IsAuthenticated]
+
+    def retrieve(self,request,*args,**kwargs):
+        print(request.user.profile)
+        return []
+    def post(self,request ,*args ,**kwargs):
+        mtu = self.request.user.profile
+        return self.create(request, mtu,*args,**kwargs)
