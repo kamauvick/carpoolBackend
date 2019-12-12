@@ -13,7 +13,8 @@ from .views import (
     RequestBoardViewSet,
     TripDetailApiView,
     TripApiView,
-    TripChatApiView
+    TripChatApiView,
+
 )
 
 router = SimpleRouter()
@@ -24,9 +25,8 @@ router.register('trip', TripApiView)
 router.register(r'devices', FCMDeviceAuthorizedViewSet)
 router.register('chat',TripChatApiView)
 urlpatterns = [
-    # path('main/' ,views.home, name='home'),
     re_path(r'^', include(router.urls)),
-    re_path(r'^accounts/', include('allauth.urls')),
+    # re_path(r'^accounts/', include('allauth.urls')),
     re_path(r'^auth/', include('rest_auth.urls')),
     re_path(r'^auth/register/', include('rest_auth.registration.urls')),
 ]

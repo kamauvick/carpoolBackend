@@ -5,6 +5,8 @@ from . import notification
 from .serializers import *
 from rest_framework.exceptions import ValidationError,MethodNotAllowed
 from rest_framework.permissions import IsAuthenticated
+from django.http import JsonResponse
+from rest_framework.response import Response
 
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -15,7 +17,7 @@ class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
-    # permission_classes = (IsAuthenticated)
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         profile = self.request.user.profile

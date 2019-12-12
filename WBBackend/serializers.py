@@ -29,7 +29,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ['first_name', 'last_name', 'phone_number',
                   'profile_pic', 'user', 'device_id', ]
-        read_only_fields = ['user', 'device_id', ]
+        read_only_fields = ['user', 'device_id',]
 
 
 class RequestBoardSerializer(serializers.ModelSerializer):
@@ -47,7 +47,8 @@ class RequestBoardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RequestBoard
-        exclude = ("")
+        exclude = ""
+
 
 
 class TripDetailsSerializer(serializers.ModelSerializer):

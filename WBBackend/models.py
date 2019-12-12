@@ -56,13 +56,13 @@ class Demand(models.Model):
 
 
 class RequestBoard(models.Model):
-    PENDING='PE'
-    ACCEPTED='AC'
-    DENIDE='DE'
-    REQUEST_STATUS=[
-    (PENDING,"Pending"),
-    (ACCEPTED,"Accepted"),
-    (DENIDE,"Denied"),
+    PENDING = 'PE'
+    ACCEPTED = 'AC'
+    DENIDE = 'DE'
+    REQUEST_STATUS = [
+        (PENDING, "Pending"),
+        (ACCEPTED, "Accepted"),
+        (DENIDE, "Denied"),
     ]
     offer = models.ForeignKey(Offer, related_name='requests', on_delete=models.CASCADE)
     status = models.CharField(choices=REQUEST_STATUS, max_length=2)
