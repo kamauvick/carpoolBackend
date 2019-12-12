@@ -5,12 +5,13 @@ from . import notification
 from .serializers import *
 from rest_framework.exceptions import ValidationError,MethodNotAllowed
 from rest_framework.permissions import IsAuthenticated
+from django.http import JsonResponse
+from rest_framework.response import Response
 
 from django.http import JsonResponse
 from rest_framework.response import Response
 # Create your views here.
-
-# Create your views here.
+from .serializers import ProfileSerializer
 
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
@@ -30,7 +31,6 @@ class ProfileView(ModelViewSet):
 class RequestBoardViewSet(ModelViewSet):
     queryset = RequestBoard.objects.all()
     serializer_class = RequestBoardSerializer
-
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
