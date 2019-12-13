@@ -1,5 +1,5 @@
 from django.urls import re_path, include
-
+from . import views
 # FCM NOTIFICATIONS
 from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 from rest_framework.routers import DefaultRouter
@@ -29,4 +29,6 @@ urlpatterns = [
     # re_path(r'^accounts/', include('allauth.urls')),
     re_path(r'^auth/', include('rest_auth.urls')),
     re_path(r'^auth/register/', include('rest_auth.registration.urls')),
+    re_path(r'offers/', views.OffersList.as_view()),
+    re_path(r'demands/', views.DemandsList.as_view()),
 ]
