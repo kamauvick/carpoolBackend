@@ -1,13 +1,13 @@
 from django.http import JsonResponse
 from rest_framework.viewsets import ModelViewSet
-
+from .models import *
 from . import notification
 from .serializers import *
 from rest_framework.exceptions import ValidationError,MethodNotAllowed
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from rest_framework.response import Response
-
+from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework.response import Response
 # Create your views here.
@@ -26,6 +26,27 @@ class ProfileView(ModelViewSet):
 
     def get_object(self):
         return self.request.user.profile
+
+class OffersList(APIView):
+    def get(self, request, format=None):
+        all_offers = Offer.objects.all()
+        serializers = OfferSerializer(all_offers, many=True)
+        return Response([serializers.data])
+    
+    def post(self, request):
+        offer = request.data.get('offer')
+        serializer = OfferSerializer(data=offer)
+        if serializer.is_valid(raise_exception=True):
+            saved_offer = serializer.save()
+        return Response({"Success": "Offer '{}' created succesfully".format(saved_offer.driver)})
+
+
+
+class DemandsList(APIView):
+    def get(self, request, format=None):
+        all_demands = Demand.objects.all()
+        serializers = DemandSerializer(all_demands, many=True)
+        return Response(serializers.data)
 
 
 class RequestBoardViewSet(ModelViewSet):
