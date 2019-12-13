@@ -152,3 +152,18 @@ class TripChat(models.Model):
         db_table = 'tripchat'
         verbose_name = 'tripchat'
         verbose_name_plural = 'tripchat'
+
+class Survey:
+    user = models.ForeignKey(Profile, on_delete=models.PROTECT)
+    question = models.CharField(max_length=20)
+    response = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f'{user.username}'
+
+class Emmissions:
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    saved_emmissions = models.FloatField()
+
+    def __str__(self):
+        return f'saved {saved_emmissions} emmissions'
