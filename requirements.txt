@@ -1,5 +1,4 @@
 appdirs==1.4.3
-apturl==0.5.2
 asn1crypto==0.24.0
 attrs==19.3.0
 black==19.10b0
