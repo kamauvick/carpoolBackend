@@ -25,5 +25,5 @@ def chat_notification(receivers, msg_title, act_msg):
             device.send_message(title=msg_title, body=act_msg, icon=pool_icon)
             print('************************* worked')
         except Exception as e:
-            print('************************* Failed Teribly')
+            print('************************* Failed Terribly')
             print(e)

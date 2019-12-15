@@ -2,8 +2,18 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError, MethodNotAllowed
 from .models import *
 from rest_framework import status
+import re
+import requests
 
+class UserDataSerializer(serializers.ModelSerializer):
+    def update(self, instance, validated_data):
+        pass
 
+    class Meta:
+        model = UserData
+        fields = ['first_name','last_name', 'username', 'phone_number', 'email',]
+        read_only_fields = ["first_name", 'last_name', 'username', 'phone_number',]
+    
 class ProfileSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
@@ -13,8 +23,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         if self.context['request'].user != instance.user:
             raise ValidationError(detail='You must be a user to edit.')
         phone_number = validated_data.get('phone_number', None)
-        # profile_pic = validated_data.get('profile_pic', None)
-        print(phone_number)
+        print(f'########{phone_number}##########')
         if phone_number is None:
             if not self.partial:
                 raise ValidationError(
@@ -23,7 +32,7 @@ class ProfileSerializer(serializers.ModelSerializer):
                 instance.phone_number = phone_number
                 # instance.profile_pic = profile_pic
                 instance.save()
-            return instance
+            return super.create(instance)
 
     class Meta:
         model = Profile

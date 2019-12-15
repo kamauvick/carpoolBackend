@@ -12,6 +12,28 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 # Create your views here.
 from .serializers import ProfileSerializer
+from WBBackend.validate_user import ValidateUser
+
+class UserDataView(APIView):
+    def get(self, request, format=None):
+        dummy_param = 'dummy'
+        email = self.request.query_params.get('email')
+        api_key = self.request.query_params.get('apiKey')
+        
+        # Validate passed user emails 
+        email = ValidateUser.validate_email(dummy_param,email)
+        print(email)
+        
+        my_user = ValidateUser.check_if_user_exists(dummy_param,api_key,email)
+        if my_user is None:
+            print('No data on the user')
+        else:
+            print(my_user)
+
+        users = UserData.objects.all()
+        serializers = UserDataSerializer(users, many=True)
+        return Response(serializers.data)
+    
 
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
