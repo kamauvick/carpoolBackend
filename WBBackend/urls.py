@@ -31,4 +31,5 @@ urlpatterns = [
     re_path(r'^auth/register/', include('rest_auth.registration.urls')),
     re_path(r'offers/', views.OffersList.as_view()),
     re_path(r'demands/', views.DemandsList.as_view()),
+    re_path(r'userdata/', views.UserDataView.as_view()),
 ]
