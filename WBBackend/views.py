@@ -23,14 +23,15 @@ class UserDataView(APIView):
         # Validate passed user emails 
         try:
             valid_email = ValidateUser.validate_email(dummy_param,email)
+            print(valid_email)
             try:
                 #Check if a user exists and get user data
                 my_user = ValidateUser.check_if_user_exists(dummy_param,api_key,valid_email)
                 print(my_user)
             except Exception as e:
-                print("The user was not found"+ e)
+                print("The user was not found")
         except Exception as e:
-            print('The data you passed was invalid' + e)
+            print('The data you passed was invalid')
 
         users = UserData.objects.all()
         serializers = UserDataSerializer(users, many=True)
