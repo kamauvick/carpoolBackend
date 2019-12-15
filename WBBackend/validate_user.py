@@ -16,6 +16,7 @@ class ValidateUser():
         regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
         if re.search(regex,email):
             print('The email you provided is valid.')
+            return email
         else:
             print('The email you provided is invalid.')
 
@@ -32,8 +33,9 @@ class ValidateUser():
             'content-type': "application/json"
         }
         response = requests.request("GET", url=url, headers=headers)
+        print(response.status_code)
         if response.status_code == 200:
             return response.json()
         else:
-            print(response.status_code + 'The request failed')
+            print(response.status_code + 'the request failed')
          
