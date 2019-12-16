@@ -11,7 +11,6 @@ admin.site.register(Trip)
 admin.site.register(TripChat)
 admin.site.register(TripDetail)
 
-
 # Register your models here.
 
 
@@ -25,5 +24,18 @@ class Profile(admin.ModelAdmin):
                    )
 
     ordering = ("id",)
+
+    read_only_fields = ("user",)
+
+@admin.register(UserData)
+class UserData(admin.ModelAdmin):
+    exclude = ('user',)
+
+    list_display = ('first_name', 'last_name', 'username','phone_number', 'email')
+
+    list_filter = ('first_name', 'last_name', 'email',
+                   )
+
+    ordering = ("first_name",)
 
     read_only_fields = ("user",)
