@@ -33,7 +33,22 @@ def create_new_user(self, id, first_name, last_name, username, password, email, 
         
         #Send token to email
         sender = 'waichigovick@gmail.com'
-        send_mail(sender=sender, receiver=email, subject=random_user_code, html=None)
+        email_body= """
+        <html>
+            <head>
+                <title> World Bank car pooling authentication </title>
+            </head>
+        
+            <body>
+                <h2> Hi %s </h2>
+                <p>Your confirmation key is %s </p>
+                
+                <h5>Enjoy the pooling Experience </h5>
+            </body>
+        </html>
+        
+        """ %(username, random_user_code)
+        send_mail(sender=sender, receiver=email, subject='Car Pooling App', html=email_body)
         
     else:
         raise ValidationError(detail='The user object is empty') 
