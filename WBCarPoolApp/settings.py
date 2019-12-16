@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_filters',
     'coreapi',
     'fcm_django',
+    'drf_yasg',
 ]
 FCM_DJANGO_SETTINGS = {
     "FCM_SERVER_KEY": config('FCM_SERVER_KEY')
