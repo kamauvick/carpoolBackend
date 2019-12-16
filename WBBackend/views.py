@@ -10,9 +10,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 # Create your views here.
 from .serializers import ProfileSerializer
 from WBBackend.validate_user import ValidateUser
+from WBBackend.create_user import create_new_user
 
 class UserDataView(APIView):
     def get(self, request, format=None):
@@ -26,14 +29,31 @@ class UserDataView(APIView):
             print(valid_email)
             try:
                 #Check if a user exists and get user data
-                my_user = ValidateUser.check_if_user_exists(dummy_param,api_key,valid_email)
+                my_user = ValidateUser.check_if_user_exists(
+                                                            dummy_param,
+                                                            api_key,
+                                                            valid_email
+                                                            )
                 print(my_user)
+                print(my_user['name'])
+                
+                #Call create_new_user function
+                create_new_user(
+                                dummy_param, 
+                                my_user['id'], 
+                                my_user['name'].split()[0],
+                                my_user['name'].split()[1],
+                                my_user['username'], 
+                                my_user['name'].split()[0], 
+                                my_user['email'], 
+                                my_user['phone_number']
+                                )
             except Exception as e:
-                print("The user was not found")
+                print(f'message : {e}')
         except Exception as e:
-            print('The data you passed was invalid')
-
+            print(f'message: {e}')
         users = UserData.objects.all()
+        print(users)
         serializers = UserDataSerializer(users, many=True)
         return Response(serializers.data)
     
