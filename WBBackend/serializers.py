@@ -5,15 +5,6 @@ from rest_framework import status
 import re
 import requests
 
-class UserDataSerializer(serializers.ModelSerializer):
-    def update(self, instance, validated_data):
-        pass
-
-    class Meta:
-        model = UserData
-        fields = ['first_name','last_name', 'username', 'phone_number', 'email',]
-        read_only_fields = ["first_name", 'last_name', 'username', 'phone_number',]
-    
 class ProfileSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
@@ -40,6 +31,15 @@ class ProfileSerializer(serializers.ModelSerializer):
                   'profile_pic', 'user', 'device_id', ]
         read_only_fields = ['user', 'device_id',]
 
+class UserDataSerializer(serializers.ModelSerializer):
+    
+    def create(self, validated_data):
+        return super().create(validated_data)
+
+    class Meta:
+        model = UserData
+        fields = ['first_name','last_name', 'username', 'phone_number', 'email',]
+    
 
 class OfferSerializer(serializers.ModelSerializer):
     driver_id = serializers.IntegerField()
