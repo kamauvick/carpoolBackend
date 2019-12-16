@@ -15,7 +15,9 @@ class UserData(models.Model):
         return f'{self.username}'
     class Meta:
         db_table = 'userdata'
-        
+        verbose_name = 'userdata'
+        verbose_name_plural = 'userdata'
+
 
 class Profile(models.Model):
     first_name = models.CharField(max_length=200, null=True)
