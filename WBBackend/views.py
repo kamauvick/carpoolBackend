@@ -15,13 +15,14 @@ from django.contrib.auth.models import User
 # Create your views here.
 from .serializers import ProfileSerializer
 from WBBackend.validate_user import ValidateUser
-from WBBackend.create_user import create_new_user
+from WBBackend.create_user import create_new_user,generate_code
 
 class UserDataView(APIView):
     def get(self, request, format=None):
         dummy_param = 'dummy'
         email = self.request.query_params.get('email')
         api_key = self.request.query_params.get('apiKey')
+        auth_code = generate_code()
         
         # Validate passed user emails 
         try:
@@ -33,7 +34,7 @@ class UserDataView(APIView):
                                                             dummy_param,
                                                             api_key,
                                                             valid_email
-                                                            )
+                                                          )
                 print(my_user)
                 print(my_user['name'])
                 
@@ -44,7 +45,7 @@ class UserDataView(APIView):
                                 my_user['name'].split()[0],
                                 my_user['name'].split()[1],
                                 my_user['username'], 
-                                my_user['name'].split()[0], 
+                                auth_code,
                                 my_user['email'], 
                                 my_user['phone_number']
                                 )
@@ -58,6 +59,7 @@ class UserDataView(APIView):
         return Response(serializers.data)
     
     
+
 
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
