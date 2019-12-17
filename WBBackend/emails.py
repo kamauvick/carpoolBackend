@@ -7,9 +7,10 @@ def send_mail(sender,receiver,subject,html):
         from_email=sender,
         to_emails=receiver,
         subject=subject,
-        html_content=html
+        html_content=html)
     try:
         sg = SendGridAPIClient(config('SENDGRID_API_KEY'))
         response = sg.send(message)
+        print(response)
     except Exception as e:
-        print(e.message)
+        print(f'Error while sending email. {e}')

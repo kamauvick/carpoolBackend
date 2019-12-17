@@ -1,21 +1,71 @@
 from django.http import JsonResponse
 from rest_framework.viewsets import ModelViewSet
-
+from .models import *
 from . import notification
 from .serializers import *
 from rest_framework.exceptions import ValidationError,MethodNotAllowed
 from rest_framework.permissions import IsAuthenticated
-
 from django.http import JsonResponse
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 # Create your views here.
 from .serializers import ProfileSerializer
+from WBBackend.validate_user import ValidateUser
+from WBBackend.create_user import create_new_user,generate_code
+
+class UserDataView(APIView):
+    def get(self, request, format=None):
+        dummy_param = 'dummy'
+        email = self.request.query_params.get('email')
+        api_key = self.request.query_params.get('apiKey')
+        auth_code = generate_code()
+        
+        # Validate passed user emails 
+        try:
+            valid_email = ValidateUser.validate_email(dummy_param,email)
+            print(valid_email)
+            try:
+                #Check if a user exists and get user data
+                my_user = ValidateUser.check_if_user_exists(
+                                                            dummy_param,
+                                                            api_key,
+                                                            valid_email
+                                                          )
+                print(my_user)
+                print(my_user['name'])
+                
+                #Call create_new_user function
+                create_new_user(
+                                dummy_param, 
+                                my_user['id'], 
+                                my_user['name'].split()[0],
+                                my_user['name'].split()[1],
+                                my_user['username'], 
+                                auth_code,
+                                my_user['email'], 
+                                my_user['phone_number']
+                                )
+            except Exception as e:
+                print(f'message : {e}')
+        except Exception as e:
+            print(f'message: {e}')
+        users = UserData.objects.all()
+        print(users)
+        serializers = UserDataSerializer(users, many=True)
+        return Response(serializers.data)
+    
+    
+
 
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
-    # permission_classes = (IsAuthenticated)
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         profile = self.request.user.profile
@@ -24,6 +74,27 @@ class ProfileView(ModelViewSet):
 
     def get_object(self):
         return self.request.user.profile
+
+class OffersList(APIView):
+    def get(self, request, format=None):
+        all_offers = Offer.objects.all()
+        serializers = OfferSerializer(all_offers, many=True)
+        return Response([serializers.data])
+    
+    def post(self, request):
+        offer = request.data.get('offer')
+        serializer = OfferSerializer(data=offer)
+        if serializer.is_valid(raise_exception=True):
+            saved_offer = serializer.save()
+        return Response({"Success": "Offer '{}' created succesfully".format(saved_offer.driver)})
+
+
+
+class DemandsList(APIView):
+    def get(self, request, format=None):
+        all_demands = Demand.objects.all()
+        serializers = DemandSerializer(all_demands, many=True)
+        return Response(serializers.data)
 
 
 class RequestBoardViewSet(ModelViewSet):

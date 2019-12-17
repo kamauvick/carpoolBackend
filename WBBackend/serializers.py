@@ -2,7 +2,8 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError, MethodNotAllowed
 from .models import *
 from rest_framework import status
-
+import re
+import requests
 
 class ProfileSerializer(serializers.ModelSerializer):
 
@@ -13,8 +14,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         if self.context['request'].user != instance.user:
             raise ValidationError(detail='You must be a user to edit.')
         phone_number = validated_data.get('phone_number', None)
-        # profile_pic = validated_data.get('profile_pic', None)
-        print(phone_number)
+        print(f'########{phone_number}##########')
         if phone_number is None:
             if not self.partial:
                 raise ValidationError(
@@ -23,13 +23,61 @@ class ProfileSerializer(serializers.ModelSerializer):
                 instance.phone_number = phone_number
                 # instance.profile_pic = profile_pic
                 instance.save()
-            return instance
+            return super.create(instance)
 
     class Meta:
         model = Profile
         fields = ['first_name', 'last_name', 'phone_number',
                   'profile_pic', 'user', 'device_id', ]
-        read_only_fields = ['user', 'device_id', ]
+        read_only_fields = ['user', 'device_id',]
+
+class UserDataSerializer(serializers.ModelSerializer):
+    
+    def create(self, validated_data):
+        return super().create(validated_data)
+
+    class Meta:
+        model = UserData
+        fields = ['first_name','last_name', 'username', 'phone_number', 'email',]
+    
+
+class OfferSerializer(serializers.ModelSerializer):
+    driver_id = serializers.IntegerField()
+    origin = serializers.CharField(max_length=20)
+    destination = serializers.CharField(max_length=20)
+    available_seats = serializers.IntegerField()
+    departure_time = serializers.TimeField()
+    created_at = serializers.DateTimeField()
+    is_full = serializers.BooleanField()
+    is_ended = serializers.BooleanField()
+
+    def create(self, validated_data):
+        return Offer.objects.create(**validated_data)
+
+    def update(self, instance, validated_data, many=True):
+        instance.driver = validated_data.get('driver', instance.driver)
+        instance.origin = validated_data.get('origin', instance.origin)
+        instance.destination = validated_data.get('destination', instance.destination)
+        instance.available_seats = validated_data.get('available_seats', instance.available_seats)
+        instance.departure_time = validated_data.get('depature_time', instance.departure_time)
+        instance.created_at = validated_data.get('created_at', instance.created_at)
+        instance.is_full = validated_data.get('is_full', instance.is_full)
+        instance.is_ended = validated_data.get('is_ended', instance.is_ended)
+
+        instance.save()
+        return instance
+
+    class Meta:
+        model = Offer
+        fields = ('driver','origin','destination','available_seats',
+                'departure_time','created_at', 'is_full','is_ended')
+
+
+class DemandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Demand
+        fields = ('passenger','origin','destination','available_seats',
+                'departure_time','created_at')
 
 
 class RequestBoardSerializer(serializers.ModelSerializer):
@@ -47,7 +95,8 @@ class RequestBoardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RequestBoard
-        exclude = ("")
+        exclude = ""
+
 
 
 class TripDetailsSerializer(serializers.ModelSerializer):

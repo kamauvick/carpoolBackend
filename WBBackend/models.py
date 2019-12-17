@@ -4,6 +4,21 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+class UserData(models.Model):
+    first_name = models.CharField(max_length=200, null=True)
+    last_name = models.CharField(max_length=200, null=True)
+    username = models.CharField(max_length=200)
+    phone_number = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return f'{self.username}'
+    class Meta:
+        db_table = 'userdata'
+        verbose_name = 'userdata'
+        verbose_name_plural = 'userdata'
+
+
 class Profile(models.Model):
     first_name = models.CharField(max_length=200, null=True)
     last_name = models.CharField(max_length=200, null=True)
@@ -25,14 +40,23 @@ class Profile(models.Model):
         return f'{self.first_name}'
 
     class Meta:
-        db_table = 'users'
-
-
+        db_table = 'profile'
+        verbose_name = 'profile'
+        verbose_name_plural = 'profile'
+    
+    
 class Location(models.Model):
     name = models.CharField(max_length=200)
     latitude = models.FloatField()
     longitude = models.FloatField()
     distance = models.IntegerField()
+    
+    
+    def __str__(self):
+        return f'{self.name}'
+    
+    class Meta:
+        db_table = 'location'
 
 
 class Offer(models.Model):
@@ -44,6 +68,14 @@ class Offer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_full = models.BooleanField(default=False)
     is_ended = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f'Offer by {self.driver} to {self.destination}'
+    
+    class Meta:
+        db_table = 'offer'
+        verbose_name = 'offer'
+        verbose_name_plural = 'offers'
 
 
 class Demand(models.Model):
@@ -53,16 +85,24 @@ class Demand(models.Model):
     available_seats = models.IntegerField()
     departure_time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f'Demand by {self.passenger} for {self.destination}'
+    
+    class Meta:
+        db_table = 'demand'
+        verbose_name = 'demand'
+        verbose_name_plural = 'demands'
 
 
 class RequestBoard(models.Model):
-    PENDING='PE'
-    ACCEPTED='AC'
-    DENIDE='DE'
-    REQUEST_STATUS=[
-    (PENDING,"Pending"),
-    (ACCEPTED,"Accepted"),
-    (DENIDE,"Denied"),
+    PENDING = 'PE'
+    ACCEPTED = 'AC'
+    DENIDE = 'DE'
+    REQUEST_STATUS = [
+        (PENDING, "Pending"),
+        (ACCEPTED, "Accepted"),
+        (DENIDE, "Denied"),
     ]
     offer = models.ForeignKey(Offer, related_name='requests', on_delete=models.CASCADE)
     status = models.CharField(choices=REQUEST_STATUS, max_length=2)
@@ -109,3 +149,23 @@ class TripChat(models.Model):
 
     def __str__(self):
         return f"{self.user.user.username}'s message"
+    
+    class Meta:
+        db_table = 'tripchat'
+        verbose_name = 'tripchat'
+        verbose_name_plural = 'tripchat'
+
+class Survey:
+    user = models.ForeignKey(Profile, on_delete=models.PROTECT)
+    question = models.CharField(max_length=20)
+    response = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f'{user.username}'
+
+class Emmissions:
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    saved_emmissions = models.FloatField()
+
+    def __str__(self):
+        return f'saved {saved_emmissions} emmissions'

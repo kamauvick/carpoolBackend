@@ -1,3 +1,4 @@
+gunicorn==20.0.4
 certifi==2019.11.28
 chardet==3.0.4
 coreapi==2.3.3
@@ -20,7 +21,6 @@ Markdown==3.1.1
 MarkupSafe==1.1.1
 oauthlib==3.1.0
 Pillow==6.2.1
-psycopg2==2.8.4
 pyfcm==1.4.7
 python-decouple==3.3
 python-http-client==3.2.1
