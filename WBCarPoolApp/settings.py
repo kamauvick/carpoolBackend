@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_filters',
     'coreapi',
     'fcm_django',
+    'drf_yasg',
 ]
 FCM_DJANGO_SETTINGS = {
     "FCM_SERVER_KEY": config('FCM_SERVER_KEY')
@@ -95,8 +96,6 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                # 'social_django.context_processors.backends',
-                # 'social_django.context_processors.login_redirect',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',

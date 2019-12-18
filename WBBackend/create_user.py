@@ -1,4 +1,3 @@
-#Create new user
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
@@ -7,7 +6,13 @@ import string
 from WBBackend.emails import send_mail
 from WBBackend.models import UserData
 
+def generate_code():
+    """Generate a unique random 5 digit code"""
+    random_user_code = ''.join(random.sample(string.digits, 5))
+    return random_user_code
+        
 
+#Create new user
 def create_new_user(self, id, first_name, last_name, username, password, email, phone_number):
     """
     Creates a new instance of User and a user authentication token
@@ -23,12 +28,12 @@ def create_new_user(self, id, first_name, last_name, username, password, email, 
     if new_user:
         new_user.save()
         userdata.save()
-        # Generate user token
+        # Generate user authentication token
         token = Token.objects.create(user=new_user)
         print(f'Auth token: {token}')
         
-        #Generate a unique 5 digit code 
-        random_user_code = ''.join(random.sample(string.digits, 5))
+        #Get a unique 5 digit code
+        random_user_code  = generate_code()
         print(f'Confirmation code: {random_user_code}')
         
         #Send token to email
@@ -38,7 +43,6 @@ def create_new_user(self, id, first_name, last_name, username, password, email, 
             <head>
                 <title> World Bank car pooling authentication </title>
             </head>
-        
             <body>
                 <h2> Hi %s </h2>
                 <p>Your confirmation key is %s </p>
