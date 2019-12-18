@@ -31,7 +31,7 @@ class ValidateUser:
         """
         url = f"http://bw0rld.herokuapp.com/wb_users/?apiKey={api_key}&email={email}"
         headers = {
-            "authorization": config('AUTHORIZATION'),
+            "authorization": 'Token 46e32eb8c65cf1f0af7923cf2b821198ef6a8474',
             "content-type": "application/json",
         }
         response = requests.request("GET", url=url, headers=headers)
