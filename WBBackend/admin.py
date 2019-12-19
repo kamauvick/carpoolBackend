@@ -18,7 +18,7 @@ admin.site.register(TripDetail)
 class Profile(admin.ModelAdmin):
     exclude = ('user',)
 
-    list_display = ('first_name', 'last_name', 'phone_number', 'profile_pic', 'device_id')
+    list_display = ('first_name', 'last_name', 'phone_number', 'profile_pic',)
 
     list_filter = ('id', 'first_name', 'last_name',
                    )
