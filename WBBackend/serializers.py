@@ -14,7 +14,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         if self.context['request'].user != instance.user:
             raise ValidationError(detail='You must be a user to edit.')
         phone_number = validated_data.get('phone_number', None)
-        print(f'########{phone_number}##########')
+        print(f'***Updated phone_number: {phone_number} ***')
         if phone_number is None:
             if not self.partial:
                 raise ValidationError(
@@ -23,13 +23,13 @@ class ProfileSerializer(serializers.ModelSerializer):
                 instance.phone_number = phone_number
                 # instance.profile_pic = profile_pic
                 instance.save()
-            return super.create(instance)
+        return instance
 
     class Meta:
         model = Profile
         fields = ['first_name', 'last_name', 'phone_number',
-                  'profile_pic', 'user', 'device_id', ]
-        read_only_fields = ['user', 'device_id',]
+                  'profile_pic', 'user', ]
+        read_only_fields = ['user',]
 
 class UserDataSerializer(serializers.ModelSerializer):
     
