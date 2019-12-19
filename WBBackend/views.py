@@ -18,9 +18,7 @@ from WBBackend.validate_user import ValidateUser
 from WBBackend.create_user import create_new_user,generate_code
 
 class UserDataView(APIView):
-    permission_classes = []
-    serializers = UserDataSerializer(users, many=True)
-    
+
     def get(self, request, format=None):
         email = self.request.query_params.get('email')
         api_key = self.request.query_params.get('apiKey')
@@ -52,7 +50,8 @@ class UserDataView(APIView):
         users = UserData.objects.all()
         print(users)
         
-
+        permission_classes = []
+        serializers = UserDataSerializer(users, many=True)
         return Response(serializers.data)
     
     
