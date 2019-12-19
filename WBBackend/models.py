@@ -161,11 +161,21 @@ class Survey:
     response = models.CharField(max_length=20)
 
     def __str__(self):
-        return f'{user.username}'
+        return f'This survey was submitted by {user.username}.'
+    
+    class Meta:
+        db_table = 'survey'
+        verbose_name = 'passenger_survey'
+        verbose_name_plural = 'passenger_surveys'
 
 class Emmissions:
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
     saved_emmissions = models.FloatField()
 
     def __str__(self):
-        return f'saved {saved_emmissions} emmissions'
+        return f'saved {saved_emmissions}"%" of carbon emmissions'
+    
+    class Meta:
+        db_table = 'emmission'
+        verbose_name = 'saved_carbon_emmission'
+        verbose_name_plural = 'saved_carbon_emmisions'
