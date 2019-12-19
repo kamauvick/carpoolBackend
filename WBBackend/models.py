@@ -25,7 +25,6 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=100, null=True)
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, default='sample.jpg', null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    device_id = models.CharField(max_length=255)
 
     @receiver(post_save, sender=User)
     def create_profile(sender, instance, created, **kwargs):
