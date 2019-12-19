@@ -7,17 +7,25 @@ from WBBackend.emails import send_mail
 from WBBackend.models import UserData
 
 def generate_code():
-    """Generate a unique random 5 digit code"""
-    random_user_code = ''.join(random.sample(string.digits, 5))
-    return random_user_code
+    """Generate a random password with strings and digits"""
+    randpass = string.ascii_letters + string.digits
+    random_user_code = ''.join(random.choice(randpass) for i in range(8))
+    return random_user_code 
         
 
 #Create new user
-def create_new_user(self, id, first_name, last_name, username, password, email, phone_number):
+def create_new_user(id, first_name, last_name, username, password, email, phone_number):
     """
     Creates a new instance of User and a user authentication token
     """
-    new_user = User.objects.create_user(username=username, password=password)
+    #Create a new user
+    new_user = User.objects.create_user(
+        username=username,
+        email=email,
+        password=password
+        )
+    
+    #Populate the user data table 
     userdata = UserData.objects.create(
         first_name=first_name, 
         last_name=last_name, 
@@ -25,6 +33,7 @@ def create_new_user(self, id, first_name, last_name, username, password, email, 
         phone_number=phone_number, 
         email=email
         )
+    
     if new_user:
         new_user.save()
         userdata.save()
@@ -33,7 +42,7 @@ def create_new_user(self, id, first_name, last_name, username, password, email, 
         print(f'Auth token: {token}')
         
         #Get a unique 5 digit code
-        random_user_code  = generate_code()
+        random_user_code  = password
         print(f'Confirmation code: {random_user_code}')
         
         #Send token to email

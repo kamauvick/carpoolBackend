@@ -18,29 +18,25 @@ from WBBackend.validate_user import ValidateUser
 from WBBackend.create_user import create_new_user,generate_code
 
 class UserDataView(APIView):
+    permission_classes = []
+    serializers = UserDataSerializer(users, many=True)
+    
     def get(self, request, format=None):
-        dummy_param = 'dummy'
         email = self.request.query_params.get('email')
         api_key = self.request.query_params.get('apiKey')
         auth_code = generate_code()
         
         # Validate passed user emails 
         try:
-            valid_email = ValidateUser.validate_email(dummy_param,email)
-            print(valid_email)
+            valid_email = ValidateUser.validate_email(email)
+            print(f'***VALIDATED*** {valid_email}.')
             try:
                 #Check if a user exists and get user data
-                my_user = ValidateUser.check_if_user_exists(
-                                                            dummy_param,
-                                                            api_key,
-                                                            valid_email
-                                                          )
+                my_user = ValidateUser.check_if_user_exists(api_key, valid_email)
                 print(my_user)
-                print(my_user['name'])
                 
                 #Call create_new_user function
                 create_new_user(
-                                dummy_param, 
                                 my_user['id'], 
                                 my_user['name'].split()[0],
                                 my_user['name'].split()[1],
@@ -55,7 +51,8 @@ class UserDataView(APIView):
             print(f'message: {e}')
         users = UserData.objects.all()
         print(users)
-        serializers = UserDataSerializer(users, many=True)
+        
+
         return Response(serializers.data)
     
     

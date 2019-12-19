@@ -10,13 +10,12 @@ class ValidateUser:
     """
 
     # Validate Passed address Email
-    def validate_email(self, email):
+    def validate_email(email):
         """
         A function to `validate the user emails` passed by the user. It uses `regex` to validate whether
         the email is valid or not.
-        
         """
-        regex = "^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+        regex = "^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"     
         if re.search(regex, email):
             print("The email you provided is valid.")
             return email
@@ -24,7 +23,7 @@ class ValidateUser:
             print("The email you provided is invalid.")
 
     # Check if user exists on the DB
-    def check_if_user_exists(self, api_key, email):
+    def check_if_user_exists(api_key, email):
         """
         A function that get passed `query params` from the user request and `makes a get request
         to the user DB` to obtain a user object
