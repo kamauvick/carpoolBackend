@@ -14,7 +14,6 @@ from .views import (
     TripDetailApiView,
     TripApiView,
     TripChatApiView,
-
 )
 
 #Documentation
@@ -34,9 +33,6 @@ schema_view = get_schema_view(
    public=True,
    permission_classes=(permissions.AllowAny,),
 )
-
-
-
 
 router = SimpleRouter()
 router.register('profile', ProfileView)

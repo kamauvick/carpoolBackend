@@ -24,7 +24,6 @@ class ProfileSerializer(serializers.ModelSerializer):
                 # instance.profile_pic = profile_pic
                 instance.save()
         return instance
-
     class Meta:
         model = Profile
         fields = ['first_name', 'last_name', 'phone_number',
@@ -35,14 +34,13 @@ class UserDataSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         return super().create(validated_data)
-
     class Meta:
         model = UserData
         fields = ['first_name','last_name', 'username', 'phone_number', 'email',]
     
 
 class OfferSerializer(serializers.ModelSerializer):
-    driver_id = serializers.IntegerField()
+    # driver_id = serializers.IntegerField()
     origin = serializers.CharField(max_length=20)
     destination = serializers.CharField(max_length=20)
     available_seats = serializers.IntegerField()
@@ -66,12 +64,10 @@ class OfferSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
-
     class Meta:
         model = Offer
         fields = ('driver','origin','destination','available_seats',
                 'departure_time','created_at', 'is_full','is_ended')
-
 
 class DemandSerializer(serializers.ModelSerializer):
     class Meta:
@@ -92,7 +88,6 @@ class RequestBoardSerializer(serializers.ModelSerializer):
                        "request_board": serializer.data}
             raise ValidationError(detail=details)
         return RequestBoard.objects.create(**validated_data)
-
     class Meta:
         model = RequestBoard
         exclude = ""
@@ -104,12 +99,10 @@ class TripDetailsSerializer(serializers.ModelSerializer):
         model = TripDetail
         exclude = ("")
 
-
 class TripSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         raise MethodNotAllowed(status.HTTP_405_METHOD_NOT_ALLOWED,
                                detail="Post request is not allowed in this field")
-
     class Meta:
         model = Trip
         exclude = ("")

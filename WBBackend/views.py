@@ -54,9 +54,6 @@ class UserDataView(APIView):
         serializers = UserDataSerializer(users, many=True)
         return Response(serializers.data)
     
-    
-
-
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
@@ -84,14 +81,11 @@ class OffersList(APIView):
             saved_offer = serializer.save()
         return Response({"Success": "Offer '{}' created succesfully".format(saved_offer.driver)})
 
-
-
 class DemandsList(APIView):
     def get(self, request, format=None):
         all_demands = Demand.objects.all()
         serializers = DemandSerializer(all_demands, many=True)
         return Response(serializers.data)
-
 
 class RequestBoardViewSet(ModelViewSet):
     queryset = RequestBoard.objects.all()
@@ -138,7 +132,6 @@ class RequestBoardViewSet(ModelViewSet):
         This function is ment to allow cancling a request by deleteing a request
         """
         return self.destroy(request, *args, **kwargs)
-
 
 class TripDetailApiView(ModelViewSet):
     queryset = TripDetail.objects.all()

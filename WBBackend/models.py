@@ -13,11 +13,11 @@ class UserData(models.Model):
     
     def __str__(self):
         return f'{self.username}'
+    
     class Meta:
         db_table = 'userdata'
         verbose_name = 'userdata'
         verbose_name_plural = 'userdata'
-
 
 class Profile(models.Model):
     first_name = models.CharField(max_length=200, null=True)
@@ -43,20 +43,17 @@ class Profile(models.Model):
         verbose_name = 'profile'
         verbose_name_plural = 'profile'
     
-    
 class Location(models.Model):
     name = models.CharField(max_length=200)
     latitude = models.FloatField()
     longitude = models.FloatField()
     distance = models.IntegerField()
     
-    
     def __str__(self):
         return f'{self.name}'
     
     class Meta:
         db_table = 'location'
-
 
 class Offer(models.Model):
     driver = models.ForeignKey('WBBackend.Profile', related_name='driver_profile', on_delete=models.PROTECT)
@@ -76,7 +73,6 @@ class Offer(models.Model):
         verbose_name = 'offer'
         verbose_name_plural = 'offers'
 
-
 class Demand(models.Model):
     passenger = models.ForeignKey('WBBackend.Profile', related_name='trip_passenger', on_delete=models.PROTECT)
     origin = models.ForeignKey('WBBackend.Location', related_name='demand_origin', on_delete=models.PROTECT)
@@ -92,7 +88,6 @@ class Demand(models.Model):
         db_table = 'demand'
         verbose_name = 'demand'
         verbose_name_plural = 'demands'
-
 
 class RequestBoard(models.Model):
     PENDING = 'PE'
@@ -113,7 +108,6 @@ class RequestBoard(models.Model):
     def __str__(self):
         return f'{self.demand.passenger.user.username} request to {self.offer.driver.user.username}'
 
-
 class TripDetail(models.Model):
     request = models.ForeignKey(RequestBoard, on_delete=models.PROTECT)
     offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
@@ -126,7 +120,6 @@ class TripDetail(models.Model):
     def __str__(self):
         return f"{self.offer.driver.user.username}'s trip to {self.offer.destination.name}"
 
-
 class Trip(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
     start_time = models.TimeField(null=True)
@@ -138,7 +131,6 @@ class Trip(models.Model):
 
     def __str__(self):
         return f'trip to {self.offer.destination}'
-
 
 class TripChat(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.PROTECT)
