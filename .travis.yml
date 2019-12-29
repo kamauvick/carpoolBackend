@@ -7,7 +7,7 @@ env:
   - ALLOWED_HOSTS='*'
 
 env:
-  - SECRET_KEY='TEST'
+  - SECRET_KEY='TESTS'
 
 services:
   - postgresql
