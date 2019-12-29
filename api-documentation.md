@@ -1,5 +1,7 @@
 ---
-description: A guide on using api endpoints from the car pooling application backend.
+description: >-
+  Confirm a user is a world_bank employee and create the user in the
+  application.
 ---
 
 # Confirm User emails
@@ -43,7 +45,7 @@ User exists on the WB database..and return the user object
     "first_name": "Vick",
     "last_name": "Waichigo",
     "username": "vick",
-    "phone_number": "070000000000",
+    "phone_number": "0700000000",
     "email": "waichigovick@gmail.com"
   }
 ```
@@ -56,11 +58,22 @@ Could not find a user with the email provided
 
 ```
 []
+
+
+
 ```
 {% endapi-method-response-example %}
 {% endapi-method-response %}
 {% endapi-method-spec %}
 {% endapi-method %}
+
+> #### `User_auth example.`
+
+![](.gitbook/assets/user_auth.png)
+
+{% hint style="info" %}
+Note you have to provide an authentication token on the headers for the request to be successful.
+{% endhint %}
 
 
 
