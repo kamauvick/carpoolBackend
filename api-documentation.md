@@ -8,11 +8,11 @@ description: >-
 
 {% api-method method="get" host="https://carpoolingbackend.herokuapp.com/v1/apis/user\_auth/?apiKey={api\_key}&email={email}" path="" %}
 {% api-method-summary %}
-Confirm User email
+apis/v1/user\_auth/
 {% endapi-method-summary %}
 
 {% api-method-description %}
-This endpoint allows you to confirm a users email form the World Bank users DB
+This endpoint allows you to confirm a user email from the WB database and also registers the user on the application.
 {% endapi-method-description %}
 
 {% api-method-spec %}
@@ -24,7 +24,7 @@ Authentication token to track down who sent the request.
 {% endapi-method-headers %}
 
 {% api-method-query-parameters %}
-{% api-method-parameter name="API key" type="string" required=true %}
+{% api-method-parameter name="apiKey" type="string" required=true %}
 An API key to authenticate the user.
 {% endapi-method-parameter %}
 
@@ -75,5 +75,7 @@ Could not find a user with the email provided
 Note you have to provide an authentication token on the headers for the request to be successful.
 {% endhint %}
 
-
+{% hint style="success" %}
+A new user should now be registered of the request `status_code` is `200,` and a user object should be returned as the response.
+{% endhint %}
 
