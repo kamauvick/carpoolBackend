@@ -5,6 +5,7 @@ python:
 
 env:
   - SECRET_KEY='TEST'
+  - ALLOWED_HOST='*'
 
 services:
   - postgresql
@@ -13,4 +14,4 @@ install:
   - pip3 install -r requirements.txt
 
 script:
-  - python3 manage.py test
+  - python manage.py test
