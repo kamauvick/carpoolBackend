@@ -6,7 +6,7 @@ description: >-
 
 # Confirm User emails
 
-{% api-method method="get" host="https://carpoolingbackend.herokuapp.com/v1/apis/user\_auth/" path="" %}
+{% api-method method="get" host="https://carpoolingbackend.herokuapp.com/v1/apis/user\_auth/?apiKey={api\_key}&email={email}" path="" %}
 {% api-method-summary %}
 Confirm User email
 {% endapi-method-summary %}
