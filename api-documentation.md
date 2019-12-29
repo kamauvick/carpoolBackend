@@ -1,0 +1,66 @@
+---
+description: A guide on using api endpoints from the car pooling application backend.
+---
+
+# API Documentation
+
+{% api-method method="get" host="https://carpoolingbackend.herokuapp.com/v1/apis/user\_auth/" path="" %}
+{% api-method-summary %}
+Confirm User email
+{% endapi-method-summary %}
+
+{% api-method-description %}
+This endpoint allows you to confirm a users email form the World Bank users DB
+{% endapi-method-description %}
+
+{% api-method-spec %}
+{% api-method-request %}
+{% api-method-headers %}
+{% api-method-parameter name="Authentication" type="string" required=true %}
+Authentication token to track down who sent the request.
+{% endapi-method-parameter %}
+{% endapi-method-headers %}
+
+{% api-method-query-parameters %}
+{% api-method-parameter name="API key" type="string" required=true %}
+An API key to authenticate the user.
+{% endapi-method-parameter %}
+
+{% api-method-parameter name="email" type="string" required=true %}
+The email to be used to login the user.
+{% endapi-method-parameter %}
+{% endapi-method-query-parameters %}
+{% endapi-method-request %}
+
+{% api-method-response %}
+{% api-method-response-example httpCode=200 %}
+{% api-method-response-example-description %}
+User exists on the WB database..and return the user object
+{% endapi-method-response-example-description %}
+
+```
+  {
+    "first_name": "Vick",
+    "last_name": "Waichigo",
+    "username": "vick",
+    "phone_number": "070000000000",
+    "email": "waichigovick@gmail.com"
+  }
+```
+{% endapi-method-response-example %}
+
+{% api-method-response-example httpCode=404 %}
+{% api-method-response-example-description %}
+Could not find a user with the email provided
+{% endapi-method-response-example-description %}
+
+```
+[]
+```
+{% endapi-method-response-example %}
+{% endapi-method-response %}
+{% endapi-method-spec %}
+{% endapi-method %}
+
+
+
