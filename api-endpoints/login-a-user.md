@@ -59,7 +59,7 @@ the password key sent to the users email.
 ![auth/login endpoint](../.gitbook/assets/login.png)
 
 {% hint style="info" %}
-A dictionary libelow must be provided to the POST request to log in a user.
+A dictionary like the one below must be provided to the body of the POST request to log in a user.
 {% endhint %}
 
 ```text
