@@ -10,14 +10,19 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 # Create your views here.
 from .serializers import ProfileSerializer
 from WBBackend.validate_user import ValidateUser
 from WBBackend.create_user import create_new_user,generate_code
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 class UserDataView(APIView):
+    queryset = UserData.objects.all()
+    serializer_class = UserDataSerializer
+    permission_classes_by_action = {'list': [AllowAny],}
 
     def get(self, request, format=None):
         email = self.request.query_params.get('email')
@@ -49,10 +54,19 @@ class UserDataView(APIView):
             print(f'message: {e}')
         users = UserData.objects.all()
         print(users)
-        
-        permission_classes = []
-        serializers = UserDataSerializer(users, many=True)
-        return Response(serializers.data)
+        serialized_users = UserDataSerializer(users, many=True)
+        return Response(serialized_users.data)
+    
+    def list(self, request, *args, **kwargs):
+        return super(UserDataView, self).list(request, *args, **kwargs)
+
+    def get_permissions(self):
+        try:
+            # return permission_classes depending on `action` 
+            return [permission() for permission in self.permission_classes_by_action['list']]
+        except KeyError: 
+            # action is not set return default permission_classes
+            return [permission() for permission in self.permission_classes]
     
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
@@ -156,7 +170,7 @@ class TripDetailApiView(ModelViewSet):
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+
 
 class TripApiView(ModelViewSet):
     queryset = Trip.objects.all()
