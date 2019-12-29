@@ -5,7 +5,7 @@ python:
 
 env:
   - SECRET_KEY='TEST'
-  - ALLOWED_HOST='*'
+  - ALLOWED_HOSTS='*'
 
 services:
   - postgresql
