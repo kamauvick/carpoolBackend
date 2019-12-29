@@ -2,7 +2,7 @@
 description: A guide on using api endpoints from the car pooling application backend.
 ---
 
-# API Documentation
+# Confirm User emails
 
 {% api-method method="get" host="https://carpoolingbackend.herokuapp.com/v1/apis/user\_auth/" path="" %}
 {% api-method-summary %}
