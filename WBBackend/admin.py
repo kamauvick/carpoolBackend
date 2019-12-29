@@ -13,15 +13,13 @@ admin.site.register(TripDetail)
 
 # Register your models here.
 
-
 @admin.register(Profile)
 class Profile(admin.ModelAdmin):
     exclude = ('user',)
 
-    list_display = ('first_name', 'last_name', 'phone_number', 'profile_pic', 'device_id')
+    list_display = ('first_name', 'last_name', 'phone_number', 'profile_pic',)
 
-    list_filter = ('id', 'first_name', 'last_name',
-                   )
+    list_filter = ('id', 'first_name', 'last_name',)
 
     ordering = ("id",)
 
@@ -31,10 +29,9 @@ class Profile(admin.ModelAdmin):
 class UserData(admin.ModelAdmin):
     exclude = ('user',)
 
-    list_display = ('first_name', 'last_name', 'username','phone_number', 'email')
+    list_display = ('first_name', 'last_name', 'username','phone_number', 'email',)
 
-    list_filter = ('first_name', 'last_name', 'email',
-                   )
+    list_filter = ('first_name', 'last_name', 'email',)
 
     ordering = ("first_name",)
 
