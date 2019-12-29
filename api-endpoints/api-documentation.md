@@ -4,7 +4,7 @@ description: >-
   application.
 ---
 
-# Confirm User emails
+# Confirm a users email and  register the user.
 
 {% api-method method="get" host="https://carpoolingbackend.herokuapp.com/v1/apis/user\_auth/?apiKey={api\_key}&email={email}" path="" %}
 {% api-method-summary %}
@@ -69,7 +69,7 @@ Could not find a user with the email provided
 
 > #### `User_auth example.`
 
-![](.gitbook/assets/user_auth.png)
+![](../.gitbook/assets/user_auth.png)
 
 {% hint style="info" %}
 Note you have to provide an authentication token on the headers for the request to be successful.
