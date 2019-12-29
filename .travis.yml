@@ -9,6 +9,11 @@ env:
 env:
   - SECRET_KEY='TESTS'
 
+env:
+  - DEBUG=True
+
+env:
+  - DATABASE_URI='postgresql://vick:p@localhost:5432/wb'
 services:
   - postgresql
 
