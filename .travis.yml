@@ -4,19 +4,10 @@ python:
   - "3.8"
 
 env:
-  - ALLOWED_HOSTS='*'
-
-env:
-  - SECRET_KEY='TESTS'
-
-env:
-  - DEBUG=True
-
-services:
-  - postgresql
+  - DJANGO=2.2.5 DB=postgres
 
 install:
   - pip3 install -r requirements.txt
 
 script:
-  - python manage.py test
+  - python manage.py test WBBackend
