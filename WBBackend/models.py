@@ -43,6 +43,8 @@ class Profile(models.Model):
         verbose_name = 'profile'
         verbose_name_plural = 'profile'
     
+
+# TODO :Remove the distance field and add it to offer and demand models
 class Location(models.Model):
     name = models.CharField(max_length=200)
     latitude = models.FloatField()
@@ -51,6 +53,7 @@ class Location(models.Model):
     
     def __str__(self):
         return f'{self.name}'
+
     
     class Meta:
         db_table = 'location'
