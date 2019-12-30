@@ -4,16 +4,7 @@ python:
   - "3.8"
 
 env:
-  - ALLOWED_HOSTS='*'
-
-env:
-  - SECRET_KEY='TESTS'
-
-env:
-  - DEBUG=True
-
-services:
-  - postgresql
+  - DJANGO=2.25 DB=postgres
 
 install:
   - pip3 install -r requirements.txt
