@@ -3,11 +3,16 @@ language: python
 python:
   - "3.8"
 
+services:
+  - postgresql
+
 env:
-  - DJANGO=2.2.5 DB=postgres
+  - DJANGO=2.2.5 
 
 install:
   - pip3 install -r requirements.txt
+  - pip install django==$DJANGO --quiet
+  - pip install psycopg2 --quiet
 
 before_script:
   - psql -c "CREATE DATABASE wb;" -U postgres
