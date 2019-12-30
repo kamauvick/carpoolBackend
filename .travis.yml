@@ -19,10 +19,7 @@ before_script:
   - psql -c "CREATE USER vick PASSWORD 'p';" -U postgres
   - psql -c "ALTER USER vick CREATEDB;" -U postgres
   - psql -c "GRANT ALL PRIVILEGES on DATABASE wb to vick;" -U postgres
-  - cp config/database.travis.yml config/database.yml
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
+
 
 script:
   - python manage.py migrate
