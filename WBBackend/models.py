@@ -10,10 +10,10 @@ class UserData(models.Model):
     username = models.CharField(max_length=200)
     phone_number = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
-    
+
     def __str__(self):
         return f'{self.username}'
-    
+
     class Meta:
         db_table = 'userdata'
         verbose_name = 'userdata'
@@ -42,16 +42,15 @@ class Profile(models.Model):
         db_table = 'profile'
         verbose_name = 'profile'
         verbose_name_plural = 'profile'
-    
+
 class Location(models.Model):
     name = models.CharField(max_length=200)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    distance = models.IntegerField()
-    
+
     def __str__(self):
         return f'{self.name}'
-    
+
     class Meta:
         db_table = 'location'
 
@@ -64,10 +63,10 @@ class Offer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_full = models.BooleanField(default=False)
     is_ended = models.BooleanField(default=False)
-    
+
     def __str__(self):
         return f'Offer by {self.driver} to {self.destination}'
-    
+
     class Meta:
         db_table = 'offer'
         verbose_name = 'offer'
@@ -80,10 +79,11 @@ class Demand(models.Model):
     available_seats = models.IntegerField()
     departure_time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    distance = models.DecimalField(decimal_places=2,max_digits=7,null = True)
+
     def __str__(self):
         return f'Demand by {self.passenger} for {self.destination}'
-    
+
     class Meta:
         db_table = 'demand'
         verbose_name = 'demand'
@@ -140,7 +140,7 @@ class TripChat(models.Model):
 
     def __str__(self):
         return f"{self.user.user.username}'s message"
-    
+
     class Meta:
         db_table = 'tripchat'
         verbose_name = 'tripchat'
@@ -153,7 +153,7 @@ class Survey:
 
     def __str__(self):
         return f'This survey was submitted by {user.username}.'
-    
+
     class Meta:
         db_table = 'survey'
         verbose_name = 'passenger_survey'
@@ -165,7 +165,7 @@ class Emmissions:
 
     def __str__(self):
         return f'saved {saved_emmissions}"%" of carbon emmissions'
-    
+
     class Meta:
         db_table = 'emmission'
         verbose_name = 'saved_carbon_emmission'
