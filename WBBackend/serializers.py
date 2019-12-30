@@ -31,13 +31,17 @@ class ProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ['user',]
 
 class UserDataSerializer(serializers.ModelSerializer):
-    
+
     def create(self, validated_data):
         return super().create(validated_data)
     class Meta:
         model = UserData
         fields = ['first_name','last_name', 'username', 'phone_number', 'email',]
-    
+
+class LocaionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        exclude=("")
 
 class OfferSerializer(serializers.ModelSerializer):
     # driver_id = serializers.IntegerField()
@@ -69,7 +73,11 @@ class OfferSerializer(serializers.ModelSerializer):
         fields = ('driver','origin','destination','available_seats',
                 'departure_time','created_at', 'is_full','is_ended')
 
+
 class DemandSerializer(serializers.ModelSerializer):
+    passenger = ProfileSerializer(read_only=True)
+    origin = LocaionSerializer()
+    destination = LocaionSerializer()
     class Meta:
         model = Demand
         fields = ('passenger','origin','destination','available_seats',
@@ -122,4 +130,3 @@ class TripChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = TripChat
         exclude = ("")
-
