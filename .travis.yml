@@ -1,8 +1,22 @@
 language: python
+
 python:
   - "3.8"
-# command to install dependencies
+
+env:
+  - ALLOWED_HOSTS='*'
+
+env:
+  - SECRET_KEY='TESTS'
+
+env:
+  - DEBUG=True
+
+services:
+  - postgresql
+
 install:
-  - pip install -r requirements.txt
-# command to run tests
-script: pytest
+  - pip3 install -r requirements.txt
+
+script:
+  - python manage.py test

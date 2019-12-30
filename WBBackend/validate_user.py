@@ -40,7 +40,7 @@ class ValidateUser:
         else:
             print(response.status_code + "the request failed")
 
-    #Generate Random user tokens
+    #Generate User auth tokens
     def generate_token(self, username, password):
         """
         A function to generate User authentication tokens
