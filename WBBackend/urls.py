@@ -45,11 +45,10 @@ router.register('trip_detail', TripDetailApiView)
 router.register('trip', TripApiView)
 router.register(r'devices', FCMDeviceAuthorizedViewSet)
 router.register('chat',TripChatApiView)
+
 urlpatterns = [
     re_path(r'^', include(router.urls)),
-    re_path(r'^accounts/', include('allauth.urls')),
     re_path(r'^auth/', include('rest_auth.urls')),
-    # re_path(r'^auth/register/', include('rest_auth.registration.urls')),
     re_path(r'offers/', views.OffersList.as_view()),
     re_path(r'demands/', views.DemandsList.as_view()),
     re_path(r'user_auth/', views.UserDataView.as_view()),
