@@ -22,5 +22,6 @@ before_script:
 
 
 script:
+  - python manage.py makemigrations WBBackend
   - python manage.py migrate
   - python manage.py test WBBackend
