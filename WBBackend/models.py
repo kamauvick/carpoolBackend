@@ -45,8 +45,8 @@ class Profile(models.Model):
 
 class Location(models.Model):
     name = models.CharField(max_length=200)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    lat = models.FloatField()
+    lng = models.FloatField()
 
     def __str__(self):
         return f'{self.name}'
@@ -77,10 +77,11 @@ class Demand(models.Model):
     origin = models.ForeignKey('WBBackend.Location', related_name='demand_origin', on_delete=models.PROTECT)
     destination = models.ForeignKey('WBBackend.Location', related_name='demand_destination', on_delete=models.PROTECT)
     available_seats = models.IntegerField()
-    departure_time = models.TimeField(null=True, blank=True)
+    departure_time = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
-    distance = models.DecimalField(decimal_places=2,max_digits=7,null = True)
-
+    distance = models.CharField(max_length=255)
+    complete = models.BooleanField(default=False)
+    canceled = models.BooleanField(default=False)
     def __str__(self):
         return f'Demand by {self.passenger} for {self.destination}'
 
