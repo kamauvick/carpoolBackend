@@ -20,7 +20,6 @@ before_script:
   - psql -c "ALTER USER vick CREATEDB;" -U postgres
   - psql -c "GRANT ALL PRIVILEGES on DATABASE wb to vick;" -U postgres
 
-
 script:
   - python manage.py makemigrations WBBackend
   - python manage.py migrate
