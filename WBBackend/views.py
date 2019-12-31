@@ -3,7 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 from .models import *
 from . import notification
 from .serializers import *
-from rest_framework.exceptions import ValidationError,MethodNotAllowed
+from rest_framework.exceptions import ValidationError,MethodNotAllowed, NotFound
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -28,8 +28,8 @@ class UserDataView(APIView):
         email = self.request.query_params.get('email')
         api_key = self.request.query_params.get('apiKey')
         auth_code = generate_code()
-        
-        # Validate passed user emails 
+
+        # Validate passed user emails
         try:
             valid_email = ValidateUser.validate_email(email)
             print(f'***VALIDATED*** {valid_email}.')
@@ -37,15 +37,15 @@ class UserDataView(APIView):
                 #Check if a user exists and get user data
                 my_user = ValidateUser.check_if_user_exists(api_key, valid_email)
                 print(my_user)
-                
+
                 #Call create_new_user function
                 create_new_user(
-                                my_user['id'], 
+                                my_user['id'],
                                 my_user['name'].split()[0],
                                 my_user['name'].split()[1],
-                                my_user['username'], 
+                                my_user['username'],
                                 auth_code,
-                                my_user['email'], 
+                                my_user['email'],
                                 my_user['phone_number']
                                 )
             except Exception as e:
@@ -56,18 +56,18 @@ class UserDataView(APIView):
         print(users)
         serialized_users = UserDataSerializer(users, many=True)
         return Response(serialized_users.data)
-    
+
     def list(self, request, *args, **kwargs):
         return super(UserDataView, self).list(request, *args, **kwargs)
 
     def get_permissions(self):
         try:
-            # return permission_classes depending on `action` 
+            # return permission_classes depending on `action`
             return [permission() for permission in self.permission_classes_by_action['list']]
-        except KeyError: 
+        except KeyError:
             # action is not set return default permission_classes
             return [permission() for permission in self.permission_classes]
-    
+
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
@@ -87,7 +87,7 @@ class OffersList(APIView):
         all_offers = Offer.objects.all()
         serializers = OfferSerializer(all_offers, many=True)
         return Response([serializers.data])
-    
+
     def post(self, request):
         offer = request.data.get('offer')
         serializer = OfferSerializer(data=offer)
@@ -95,11 +95,23 @@ class OffersList(APIView):
             saved_offer = serializer.save()
         return Response({"Success": "Offer '{}' created succesfully".format(saved_offer.driver)})
 
-class DemandsList(APIView):
-    def get(self, request, format=None):
-        all_demands = Demand.objects.all()
-        serializers = DemandSerializer(all_demands, many=True)
-        return Response(serializers.data)
+class DemandViewSet(ModelViewSet):
+    queryset = Demand.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = DemandSerializer
+
+    def get_queryset(self):
+        profile = self.request.user.profile
+        id = self.request.query_params.get('id')
+        if id:
+            object = Demand.objects.filter(pk = int(id))
+            if object.exists():
+                return object
+            raise NotFound(detail="Demand with that ID does not exists")
+        return Demand.objects.filter(passenger = profile)
+
+    def post(self, request,profile, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 class RequestBoardViewSet(ModelViewSet):
     queryset = RequestBoard.objects.all()
