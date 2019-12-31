@@ -97,7 +97,6 @@ class DemandSerializer(serializers.ModelSerializer):
             depature_date=validated_data['departure_time'].date()
             depature_time=validated_data['departure_time'].time()
             final_date_time = datetime.datetime.combine(depature_date,depature_time)
-            print(f"********** {depature_year} ")
             if final_date_time < now:
                 raise NotAcceptable(detail = "You can not book a ride for the previous dates")
             if int(depature_year) > int(now.year)+1:
@@ -106,7 +105,6 @@ class DemandSerializer(serializers.ModelSerializer):
             for item in ['origin','destination']:
                 a_location = Location.objects.create(**validated_data.get(item))
                 validated_data[item] = a_location
-            print(f'error ******************************* ')
             return Demand.objects.create(**validated_data)
             # return Demand.objects.create(**validated_data)
         raise ValidationError(detail = "You must be a user to create a demand", code="invalid")
