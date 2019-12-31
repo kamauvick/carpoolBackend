@@ -7,7 +7,7 @@ services:
   - postgresql
 
 env:
-  - DJANGO=2.2.5 
+  - DJANGO=2.2.5
 
 install:
   - pip3 install -r requirements.txt

@@ -39,7 +39,7 @@ class UserDataSerializer(serializers.ModelSerializer):
         model = UserData
         fields = ['first_name','last_name', 'username', 'phone_number', 'email',]
 
-class LocaionSerializer(serializers.ModelSerializer):
+class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         exclude=("")
@@ -82,8 +82,8 @@ class DemandSerializer(serializers.ModelSerializer):
     distance = serializers.CharField(required= True)
 
     passenger = ProfileSerializer(read_only=True)
-    origin = LocaionSerializer()
-    destination = LocaionSerializer()
+    origin = LocationSerializer()
+    destination = LocationSerializer()
     def create(self, validated_data):
         request = self.context['request']
         if request and hasattr(request,"user"):
