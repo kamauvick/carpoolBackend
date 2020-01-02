@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError, MethodNotAllowed
+from rest_framework.exceptions import ValidationError, MethodNotAllowed, NotAcceptable
 from .models import *
 from rest_framework import status
 import re
 import requests
+import datetime
 
 class ProfileSerializer(serializers.ModelSerializer):
 
@@ -31,13 +32,17 @@ class ProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ['user',]
 
 class UserDataSerializer(serializers.ModelSerializer):
-    
+
     def create(self, validated_data):
         return super().create(validated_data)
     class Meta:
         model = UserData
         fields = ['first_name','last_name', 'username', 'phone_number', 'email',]
-    
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        exclude=("")
 
 class OfferSerializer(serializers.ModelSerializer):
     # driver_id = serializers.IntegerField()
@@ -69,11 +74,46 @@ class OfferSerializer(serializers.ModelSerializer):
         fields = ('driver','origin','destination','available_seats',
                 'departure_time','created_at', 'is_full','is_ended')
 
+
 class DemandSerializer(serializers.ModelSerializer):
+    departure_time = serializers.DateTimeField(required = True)
+    origin = serializers.JSONField(required = True)
+    destination = serializers.JSONField(required = True)
+    distance = serializers.CharField(required= True)
+
+    passenger = ProfileSerializer(read_only=True)
+    origin = LocationSerializer()
+    destination = LocationSerializer()
+    def create(self, validated_data):
+        request = self.context['request']
+        if request and hasattr(request,"user"):
+            try:
+                validated_data['passenger'] = request.user.profile
+            except Exception as e:
+                raise ValidationError(detail = "User has no Profile", code="invalid")
+            data = request.data
+            now = datetime.datetime.now()
+            depature_year = validated_data['departure_time'].year
+            depature_date=validated_data['departure_time'].date()
+            depature_time=validated_data['departure_time'].time()
+            final_date_time = datetime.datetime.combine(depature_date,depature_time)
+            if final_date_time < now:
+                raise NotAcceptable(detail = "You can not book a ride for the previous dates")
+            if int(depature_year) > int(now.year)+1:
+                raise NotAcceptable(detail = f"Chose a near year. {depature_year} is too far")
+
+            for item in ['origin','destination']:
+                a_location = Location.objects.create(**validated_data.get(item))
+                validated_data[item] = a_location
+            return Demand.objects.create(**validated_data)
+            # return Demand.objects.create(**validated_data)
+        raise ValidationError(detail = "You must be a user to create a demand", code="invalid")
+
     class Meta:
         model = Demand
-        fields = ('passenger','origin','destination','available_seats',
-                'departure_time','created_at')
+        fields = ('id','passenger','origin','destination','available_seats',
+                'departure_time','created_at','distance')
+
 
 
 class RequestBoardSerializer(serializers.ModelSerializer):
@@ -122,4 +162,3 @@ class TripChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = TripChat
         exclude = ("")
-
