@@ -32,12 +32,12 @@ class UserDataView(APIView):
         # Validate passed user emails
         try:
             valid_email = ValidateUser.validate_email(email)
-            print(f'***VALIDATED*** {valid_email}.')
+            print(f'***VALIDATED*** {valid_email} Successfully.')
             try:
                 #Check if a user exists and get user data
                 my_user = ValidateUser.check_if_user_exists(api_key, valid_email)
                 print(my_user)
-                
+
                 #Call create_new_user function
                 create_new_user(
                                 my_user['id'],
