@@ -11,19 +11,17 @@ class ProfileSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         raise ValidationError(detail='The Profile cannot be created.')
 
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data, many=True):
         if self.context['request'].user != instance.user:
             raise ValidationError(detail='You must be a user to edit.')
-        phone_number = validated_data.get('phone_number', None)
-        print(f'***Updated phone_number: {phone_number} ***')
+        phone_number = validated_data.get('phone_number')
+        print(f'***phone_number: {phone_number} ***')
         if phone_number is None:
-            if not self.partial:
-                raise ValidationError(
-                    detail='The Phone_number must be provided.')
-            else:
-                instance.phone_number = phone_number
-                # instance.profile_pic = profile_pic
-                instance.save()
+            raise ValidationError(
+                detail='The Phone_number must be provided.')
+        else:
+            instance.phone_number = phone_number
+            instance.save()
         return instance
     class Meta:
         model = Profile
