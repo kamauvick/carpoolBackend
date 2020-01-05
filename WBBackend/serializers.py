@@ -68,8 +68,8 @@ class OfferSerializer(serializers.ModelSerializer):
             raise ValidationError(detail='User has no profile', code='001--no_profile')
 
         for item in ['origin','destination']:
-            a_location = Location.objects.create(**validated_data.get(item))
-            validated_data[item] = a_location
+            _location = Location.objects.create(**validated_data.get(item))
+            validated_data[item] = _location
         return Offer.objects.create(**validated_data)
 
     def update(self, instance, validated_data, many=True):
