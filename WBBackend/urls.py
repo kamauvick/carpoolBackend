@@ -16,7 +16,6 @@ from .views import (
     TripChatApiView,
     DemandViewSet,
     OffersList,
-    # UserDataView,
     
 )
 
@@ -47,13 +46,10 @@ router.register(r'devices', FCMDeviceAuthorizedViewSet)
 router.register('chat',TripChatApiView)
 router.register('offers', OffersList)
 router.register('demand',DemandViewSet)
-# router.register('register', Use)
 
 urlpatterns = [
     re_path(r'register/', views.UserDataView.as_view()),
     re_path(r'^auth/', include('rest_auth.urls')),
     re_path(r'^', include(router.urls)),
-    # re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    # re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
