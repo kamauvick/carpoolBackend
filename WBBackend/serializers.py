@@ -45,33 +45,45 @@ class LocationSerializer(serializers.ModelSerializer):
         exclude=("")
 
 class OfferSerializer(serializers.ModelSerializer):
-    # driver_id = serializers.IntegerField()
-    origin = serializers.CharField(max_length=20)
-    destination = serializers.CharField(max_length=20)
-    available_seats = serializers.IntegerField()
+    origin = serializers.JSONField(required = True)
+    destination = serializers.JSONField(required = True)
+    seats_needed = serializers.IntegerField()
     departure_time = serializers.TimeField()
-    created_at = serializers.DateTimeField()
     is_full = serializers.BooleanField()
-    is_ended = serializers.BooleanField()
+    is_ended = serializers.BooleanField()   
+
+    driver = ProfileSerializer(read_only=True)
+    origin = LocationSerializer()
+    destination = LocationSerializer()
 
     def create(self, validated_data):
+        now = datetime.datetime.now()
+        depature_time = validated_data.get('departure_time')
+        is_full = validated_data.get("is_full")  
+        is_ended = validated_data.get("is_ended")
+        request = self.context['request']
+        try:
+            validated_data['driver'] = request.user.profile
+        except Exception as e:
+            raise ValidationError(detail='User has no profile', code='001--no_profile')
+
+        for item in ['origin','destination']:
+            a_location = Location.objects.create(**validated_data.get(item))
+            validated_data[item] = a_location
         return Offer.objects.create(**validated_data)
 
     def update(self, instance, validated_data, many=True):
-        instance.driver = validated_data.get('driver', instance.driver)
-        instance.origin = validated_data.get('origin', instance.origin)
-        instance.destination = validated_data.get('destination', instance.destination)
-        instance.available_seats = validated_data.get('available_seats', instance.available_seats)
-        instance.departure_time = validated_data.get('depature_time', instance.departure_time)
-        instance.created_at = validated_data.get('created_at', instance.created_at)
         instance.is_full = validated_data.get('is_full', instance.is_full)
-        instance.is_ended = validated_data.get('is_ended', instance.is_ended)
+        instance.is_ended = validated_data.get('is_ended', instance.is_ended)       
+
+        # TODO : Check bugs on this endpoint
 
         instance.save()
         return instance
+        
     class Meta:
         model = Offer
-        fields = ('driver','origin','destination','available_seats',
+        fields = ('driver','origin','destination','seats_needed',
                 'departure_time','created_at', 'is_full','is_ended')
 
 
@@ -95,7 +107,7 @@ class DemandSerializer(serializers.ModelSerializer):
             now = datetime.datetime.now()
             depature_year = validated_data['departure_time'].year
             depature_date=validated_data['departure_time'].date()
-            depature_time=validated_data['departure_time'].time()
+            depature_time=validated_data['departure_time'].time()   
             final_date_time = datetime.datetime.combine(depature_date,depature_time)
             if final_date_time < now:
                 raise NotAcceptable(detail = "You can not book a ride for the previous dates")
