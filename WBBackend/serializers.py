@@ -15,12 +15,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         if self.context['request'].user != instance.user:
             raise ValidationError(detail='You must be a user to edit.')
         phone_number = validated_data.get('phone_number')
+        last_name = validated_data.get('last_name')
         print(f'***phone_number: {phone_number} ***')
         if phone_number is None:
             raise ValidationError(
                 detail='The Phone_number must be provided.')
         else:
             instance.phone_number = phone_number
+            instance.last_name = last_name
             instance.save()
         return instance
     class Meta:
