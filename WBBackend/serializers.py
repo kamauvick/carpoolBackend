@@ -16,6 +16,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             raise ValidationError(detail='You must be a user to edit.')
         phone_number = validated_data.get('phone_number')
         last_name = validated_data.get('last_name')
+        profile_pic = validated_data.get('profile_pic')
         print(f'***phone_number: {phone_number} ***')
         if phone_number is None:
             raise ValidationError(
@@ -23,6 +24,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         else:
             instance.phone_number = phone_number
             instance.last_name = last_name
+            # instance.profile_pic= profile_pic
+            # TODO: Fix profile_pic upload
             instance.save()
         return instance
     class Meta:
