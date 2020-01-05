@@ -57,9 +57,9 @@ class Location(models.Model):
         db_table = 'location'
 
 class Offer(models.Model):
-    driver = models.ForeignKey('WBBackend.Profile', related_name='driver_profile', on_delete=models.PROTECT)
-    origin = models.ForeignKey('WBBackend.Location', related_name='offer_origin', on_delete=models.PROTECT)
-    destination = models.ForeignKey('WBBackend.Location', related_name='offer_destination', on_delete=models.PROTECT)
+    driver = models.ForeignKey('WBBackend.Profile', related_name='driver_profile', on_delete=models.CASCADE)
+    origin = models.ForeignKey('WBBackend.Location', related_name='offer_origin', on_delete=models.CASCADE)
+    destination = models.ForeignKey('WBBackend.Location', related_name='offer_destination', on_delete=models.CASCADE)
     seats_needed = models.IntegerField()
     departure_time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -75,15 +75,16 @@ class Offer(models.Model):
         verbose_name_plural = 'offers'
 
 class Demand(models.Model):
-    passenger = models.ForeignKey('WBBackend.Profile', related_name='trip_passenger', on_delete=models.PROTECT)
-    origin = models.ForeignKey('WBBackend.Location', related_name='demand_origin', on_delete=models.PROTECT)
-    destination = models.ForeignKey('WBBackend.Location', related_name='demand_destination', on_delete=models.PROTECT)
+    passenger = models.ForeignKey('WBBackend.Profile', related_name='trip_passenger', on_delete=models.CASCADE)
+    origin = models.ForeignKey('WBBackend.Location', related_name='demand_origin', on_delete=models.CASCADE)
+    destination = models.ForeignKey('WBBackend.Location', related_name='demand_destination', on_delete=models.CASCADE)
     available_seats = models.IntegerField()
     departure_time = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     distance = models.CharField(max_length=255)
     complete = models.BooleanField(default=False)
     canceled = models.BooleanField(default=False)
+    
     def __str__(self):
         return f'Demand by {self.passenger} for {self.destination}'
 
@@ -112,9 +113,9 @@ class RequestBoard(models.Model):
         return f'{self.demand.passenger.user.username} request to {self.offer.driver.user.username}'
 
 class TripDetail(models.Model):
-    request = models.ForeignKey(RequestBoard, on_delete=models.PROTECT)
-    offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
-    demand = models.ForeignKey(Demand, on_delete=models.PROTECT)
+    request = models.ForeignKey(RequestBoard, on_delete=models.CASCADE)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+    demand = models.ForeignKey(Demand, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'trip_details'
@@ -124,7 +125,7 @@ class TripDetail(models.Model):
         return f"{self.offer.driver.user.username}'s trip to {self.offer.destination.name}"
 
 class Trip(models.Model):
-    offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     start_time = models.TimeField(null=True)
     stop_time = models.TimeField(null=True)
 
@@ -136,9 +137,9 @@ class Trip(models.Model):
         return f'trip to {self.offer.destination}'
 
 class TripChat(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.PROTECT)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     message = models.TextField()
-    offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -150,7 +151,7 @@ class TripChat(models.Model):
         verbose_name_plural = 'tripchat'
 
 class Survey:
-    user = models.ForeignKey(Profile, on_delete=models.PROTECT)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     question = models.CharField(max_length=20)
     response = models.CharField(max_length=20)
 
