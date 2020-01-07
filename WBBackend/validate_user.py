@@ -9,7 +9,7 @@ class ValidateUser:
     A class to `Validate user data` and `obtain a user object`
     """
 
-    # Validate Passed address Email
+    # Validate Passed Email address
     def validate_email(email):
         """
         A function to `validate the user emails` passed by the user. It uses `regex` to validate whether
