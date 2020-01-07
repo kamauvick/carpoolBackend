@@ -50,13 +50,17 @@ def create_new_user(id, first_name, last_name, username, password, email, phone_
         email_body= """
         <html>
             <head>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
                 <title> World Bank car pooling authentication </title>
             </head>
             <body>
-                <h2> Hi %s </h2>
-                <p>Your confirmation key is %s </p>
-                
-                <h5>Enjoy the pooling Experience </h5>
+                <div class="jumbotron">
+                    <h2 style="font-size:20px"> Hi <span style="font-weight:bold"> %s </span> </h2>
+                    <p class="mt-3">Your confirmation key is <span style="color:blue"> %s </span> </p>
+                </div>
+                <footer>
+                    <h5>Enjoy the pooling Experience</h5>
+                </footer>
             </body>
         </html>
         
