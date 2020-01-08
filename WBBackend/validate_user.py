@@ -29,6 +29,7 @@ class ValidateUser:
         to the user DB` to obtain a user object
         """
         url = f"http://bw0rld.herokuapp.com/wb_users/?apiKey={api_key}&email={email}"
+        print(f'************{url}**********')
         headers = {
             "authorization": config('AUTHORIZATION'),
             "content-type": "application/json",

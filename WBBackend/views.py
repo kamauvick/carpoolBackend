@@ -1,9 +1,10 @@
 from django.http import JsonResponse
+from rest_framework.decorators import api_view,authentication_classes
 from rest_framework.viewsets import ModelViewSet
 from .models import *
 from . import notification
 from .serializers import *
-from rest_framework.exceptions import ValidationError,MethodNotAllowed, NotFound
+from rest_framework.exceptions import ValidationError,MethodNotAllowed, NotFound, AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -27,6 +28,7 @@ class UserDataView(APIView):
     def get(self, request, format=None):
         email = self.request.query_params.get('email')
         api_key = self.request.query_params.get('apiKey')
+        print(api_key)
         auth_code = generate_code()
 
         # Validate passed user emails
@@ -68,6 +70,7 @@ class UserDataView(APIView):
         except KeyError:
             # action is not set return default permission_classes
             return [permission() for permission in self.permission_classes]
+
 
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
