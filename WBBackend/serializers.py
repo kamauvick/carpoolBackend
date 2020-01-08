@@ -119,6 +119,11 @@ class DemandSerializer(serializers.ModelSerializer):
 class RequestBoardSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
+        offer = validated_data['offer']
+        print('i am starting *********************')
+        if offer.is_full:
+            print('It exsist *********************')
+            raise ValidationError(detail="this offer is full" )
         exist = RequestBoard.objects.filter(
             demand=validated_data['demand']).first()
         if exist:
