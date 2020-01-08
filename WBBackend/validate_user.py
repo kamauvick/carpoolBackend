@@ -29,18 +29,16 @@ class ValidateUser:
         to the user DB` to obtain a user object
         """
         url = f"http://bw0rld.herokuapp.com/wb_users/?apiKey={api_key}&email={email}"
-        print(f'************{url}**********')
         headers = {
             "authorization": config('AUTHORIZATION'),
             "content-type": "application/json",
         }
         response = requests.request("GET", url=url, headers=headers)
-        # print(response.status_code)
+        print(response.status_code)
         if response.status_code == 200:
             return response.json()
         else:
             print(response.status_code + "the request failed")
-            print(response.json())
 
     #Generate User auth tokens
     def generate_token(self, username, password):
