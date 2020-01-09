@@ -19,13 +19,14 @@ def create_new_user(id, first_name, last_name, username, password, email, phone_
     Creates a new instance of User and a user authentication token
     """
     #Create a new user
+    
     new_user = User.objects.create_user(
         username=username,
         email=email,
         password=password
         )
     
-    #Populate the user data table 
+    #Populate the user data table
     userdata = UserData.objects.create(
         first_name=first_name, 
         last_name=last_name, 
@@ -46,7 +47,7 @@ def create_new_user(id, first_name, last_name, username, password, email, phone_
         print(f'Confirmation code: {random_user_code}')
         
         #Send token to email
-        sender = 'waichigovick@gmail.com'
+        sender = 'wpoolb@gmail.com'
         email_body= """
         <html>
             <head>

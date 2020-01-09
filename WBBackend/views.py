@@ -1,9 +1,10 @@
 from django.http import JsonResponse
+from rest_framework.decorators import api_view,authentication_classes
 from rest_framework.viewsets import ModelViewSet
 from .models import *
 from . import notification
 from .serializers import *
-from rest_framework.exceptions import ValidationError,MethodNotAllowed, NotFound
+from rest_framework.exceptions import ValidationError,MethodNotAllowed, NotFound, AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -27,36 +28,47 @@ class UserDataView(APIView):
     def get(self, request, format=None):
         email = self.request.query_params.get('email')
         api_key = self.request.query_params.get('apiKey')
+        print(api_key)
         auth_code = generate_code()
-
-        # Validate passed user emails
-        try:
-            valid_email = ValidateUser.validate_email(email)
-            print(f'***VALIDATED*** {valid_email} Successfully.')
+        if email is None:
+            raise ValidationError(detail='The email must be provided.' , code='400')
+        if api_key is None:
+            raise ValidationError(detail='The api_key must be provided.', code='400')
+        if api_key is None and email is None:
+            raise ValidationError(detail='The api_key and email must be provided.', code='400')
+        else:
+            # Validate passed user emails
             try:
-                #Check if a user exists and get user data
-                my_user = ValidateUser.check_if_user_exists(api_key, valid_email)
-                print(my_user)
+                valid_email = ValidateUser.validate_email(email)
+                print(f'***VALIDATED*** {valid_email} Successfully.')
+                try:
+                    #Check if a user exists and get user data
+                    my_user = ValidateUser.check_if_user_exists(api_key, valid_email)
+                    print(my_user)
 
-                #Call create_new_user function
-                create_new_user(
-                                my_user['id'],
-                                my_user['name'].split()[0],
-                                my_user['name'].split()[1],
-                                my_user['username'],
-                                auth_code,
-                                my_user['email'],
-                                my_user['phone_number']
-                                )
+                    if my_user is None:
+                        raise 
+
+
+                    #Call create_new_user function
+                    create_new_user(
+                                    my_user['id'],
+                                    my_user['name'].split()[0],
+                                    my_user['name'].split()[1],
+                                    my_user['username'],
+                                    auth_code,
+                                    my_user['email'],
+                                    my_user['phone_number']
+                                    )
+                except Exception as e:
+                    print(f'message : {e}')
             except Exception as e:
-                print(f'message : {e}')
-        except Exception as e:
-            print(f'message: {e}')
-        users = UserData.objects.filter(email=email)
-        print(users)
+                print(f'message: {e}')
+            users = UserData.objects.filter(email=email)
+            print(users)
 
-        serialized_users = UserDataSerializer(users, many=True)
-        return Response(serialized_users.data)
+            serialized_users = UserDataSerializer(users, many=True)
+            return Response(serialized_users.data)
 
     def list(self, request, *args, **kwargs):
         return super(UserDataView, self).list(request, *args, **kwargs)
@@ -68,6 +80,7 @@ class UserDataView(APIView):
         except KeyError:
             # action is not set return default permission_classes
             return [permission() for permission in self.permission_classes]
+
 
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
