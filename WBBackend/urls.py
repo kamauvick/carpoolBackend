@@ -10,6 +10,9 @@ from rest_framework.routers import DefaultRouter
 # Switch to FCMDeviceViewSet when authentication is not nedeed
 router = DefaultRouter()
 from rest_framework.routers import SimpleRouter
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+)
 
 from .views import (
     ProfileView ,
@@ -19,6 +22,10 @@ from .views import (
     TripChatApiView,
     DemandViewSet,
     OffersList,
+    get_otp,
+    get_token,
+    get_jwt_token,
+    test_view
 )
 
 #Documentation
@@ -53,6 +60,11 @@ urlpatterns = [
     re_path(r'^register/', views.UserDataView.as_view()),
     re_path(r'^auth/', include('rest_auth.urls')),
     re_path(r'^', include(router.urls)),
+    re_path(r'^auth2/otp',get_otp),
+    re_path(r'^auth2/jwt/token$', get_jwt_token),
+    re_path(r'^auth2/jwt/token$', get_jwt_token),
+    re_path(r'^auth2/token', get_token),
+    re_path(r'^auth2/test', test_view),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 if settings.DEBUG:
