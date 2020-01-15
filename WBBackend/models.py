@@ -1,9 +1,17 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+class User(AbstractUser):
+    phone_number = models.CharField(max_length=100, null=True)
+    refresh_token = models.TextField(null=True)
+    otp = models.TextField(null=True)
+    otp_used = models.BooleanField(default=False)
 
+    class Meta:
+        db_table = "users"
+        
 class UserData(models.Model):
     first_name = models.CharField(max_length=200, null=True)
     last_name = models.CharField(max_length=200, null=True)
