@@ -42,7 +42,7 @@ class Profile(models.Model):
         db_table = 'profile'
         verbose_name = 'profile'
         verbose_name_plural = 'profile'
-    
+
 
 # TODO :Remove the distance field and add it to offer and demand models
 class Location(models.Model):

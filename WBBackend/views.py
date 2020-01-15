@@ -128,6 +128,9 @@ class DemandViewSet(ModelViewSet):
     def post(self, request,profile, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
+    def destroy(self, request, *args, **kwargs):
+        raise MethodNotAllowed("Delete",detail="You can not delete a demand")
+
 class RequestBoardViewSet(ModelViewSet):
     queryset = RequestBoard.objects.all()
     serializer_class = RequestBoardSerializer
