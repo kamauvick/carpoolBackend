@@ -177,3 +177,25 @@ class TripChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = TripChat
         exclude = ("")
+
+class SurveySerializer(serializers.ModelSerializer):
+    user  = ProfileSerializer(read_only=True)
+    question = serializers.CharField(required=True)
+    response = serializers.CharField(required=True)
+
+    def create(self, validated_data):
+        return objects.create(**validated_data)
+
+
+    def update(self, instance, validated_data):
+        question = validated_data.get('question')
+        response = validated_data.get('response')
+
+        question = instance.response
+        response = instance.response
+        return super().update(instance, validated_data)
+
+    class Meta:
+        model = Survey
+        fields = ('user', 'question', 'response')
+        read_only_fields = ('user', )
