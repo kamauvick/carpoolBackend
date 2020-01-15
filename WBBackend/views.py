@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from rest_framework.decorators import api_view,authentication_classes
+from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.viewsets import ModelViewSet
 from .models import *
 from . import notification
@@ -13,12 +13,92 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User
+from WBBackend.models import User
 # Create your views here.
 from .serializers import ProfileSerializer
 from WBBackend.validate_user import ValidateUser
 from WBBackend.create_user import create_new_user,generate_code
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+import os
+from .emails import send_mail
+from rest_framework_simplejwt.tokens import RefreshToken
+import hashlib
+
+@api_view(http_method_names=["POST", ])
+@permission_classes([AllowAny, ])
+def get_otp(request):
+    email = request.data.get("email", None)
+    if not email:
+        return Response({"message": "must provide email"}, status=status.HTTP_400_BAD_REQUEST)
+    u: User = User.objects.filter(email=email).first()
+    if not u:
+        return Response({"message": "User with those details does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+    otp = str(int(os.urandom(2).hex(), base=16))[:6]
+    u.otp = hashlib.sha512(otp.encode()).hexdigest()
+    u.otp_used = False
+    u.save()
+    url = "<p> Pin is %s</P>" %otp
+    send_mail("wpoolb@gmail.com", u.email,"Login Confirmation",url)
+    return Response([])
+
+@api_view(http_method_names=["POST",])
+@permission_classes([AllowAny,])
+def get_jwt_token(request):
+    email = request.data.get("email", None)
+    if not email:
+        return Response({"message": "must provide email"}, status=status.HTTP_400_BAD_REQUEST)
+    password = request.data.get("otp",None)
+    if not password:
+        return Response({"message": "must provide password"}, status=status.HTTP_400_BAD_REQUEST)
+    u: User = User.objects.filter(email=email).first()
+    if not u:
+        return Response({"message": "Wrong email or password"}, status=status.HTTP_400_BAD_REQUEST)
+    h = hashlib.sha512(password.encode()).hexdigest()
+    if u.otp != h:
+        return Response({"message": "Wrong email or password"}, status=status.HTTP_400_BAD_REQUEST)
+    if u.otp_used:
+        return Response({"message": "Used password try again"}, status=status.HTTP_400_BAD_REQUEST)
+    t = RefreshToken.for_user(u)
+    data = {}
+    data["access_token"] = str(t.access_token)
+    data["refresh_token"] = str(t)
+    u.otp_used = True
+    u.save()
+    return Response(data)
+
+
+@api_view(http_method_names=["POST", ])
+@permission_classes([AllowAny, ])
+def get_token(request):
+    email = request.data.get("email", None)
+    if not email:
+        return Response({"message": "must provide email"}, status=status.HTTP_400_BAD_REQUEST)
+    password = request.data.get("otp", None)
+    if not password:
+        return Response({"message": "must provide password"}, status=status.HTTP_400_BAD_REQUEST)
+    u: User = User.objects.filter(email=email).first()
+    if not u:
+        return Response({"message": "Wrong email or password"}, status=status.HTTP_400_BAD_REQUEST)
+    h = hashlib.sha512(password.encode()).hexdigest()
+    if u.otp != h:
+        return Response({"message": "Wrong email or password"}, status=status.HTTP_400_BAD_REQUEST)
+    if u.otp_used:
+        return Response({"message": "Used password try again"}, status=status.HTTP_400_BAD_REQUEST)
+    t = Token.objects.filter(user=u).first()
+    if not t:
+        t = Token(user=u)
+        t.key = t.generate_key()
+        t.save()
+    data = {}
+    data["token"] = t.key
+    u.otp_used = True
+    u.save()
+    return Response(data)
+
+@api_view()
+@permission_classes([IsAuthenticated,])
+def test_view(request):
+    return Response("hellow")
 
 class UserDataView(APIView):
     queryset = UserData.objects.all()
@@ -48,7 +128,6 @@ class UserDataView(APIView):
 
                     if my_user is None:
                         raise 
-
 
                     #Call create_new_user function
                     create_new_user(
@@ -228,3 +307,18 @@ class TripChatApiView(ModelViewSet):
     def post(self,request ,*args ,**kwargs):
         mtu = self.request.user.profile
         return self.create(request, mtu,*args,**kwargs)
+
+class SurveyApiView(ModelViewSet):
+    serializer_class = SurveySerializer
+    permission_classes = [AllowAny]
+    # queryset = Survey.objects.all()
+
+    #Test data
+    
+    survey = [
+        'How was the trip?', 
+        'How was the overall trip experience?',
+        'Would you use the app again?'
+    ]
+
+

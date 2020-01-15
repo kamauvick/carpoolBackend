@@ -28,7 +28,7 @@ class ValidateUser:
         A function that get passed `query params` from the user request and `makes a get request
         to the user DB` to obtain a user object
         """
-        url = f"http://bw0rld.herokuapp.com/wb_users/?apiKey={api_key}&email={email}"
+        url = f"https://bw0rld.herokuapp.com/wb_users/?apiKey={api_key}&email={email}"
         headers = {
             "Authorization": config('AUTHORIZATION'),
             "content-type": "application/json",
