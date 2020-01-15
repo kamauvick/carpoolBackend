@@ -76,5 +76,14 @@ def update_trip(sender, created, instance, **kwargs):
 def notify_chat(sender, instance, **kwargs):
     receivers = get_passangers(instance)
     notification.chat_notification(receivers,f"Message From {instance.user.first_name.capitalize()}",instance.message.capitalize())
-
     print("**************",receivers)
+
+@receiver(post_save, sender=Offer)
+def end_demands(instance,**kwargs):
+    if instance.is_ended:
+        trip_details = TripDetail.objects.filter(offer = instance).all()
+        if trip_details.exists():
+            for detail in trip_details:
+                demand = Demand.objects.filter(id = detail.demand.id ).first()
+                demand.complete = True;
+                demand.save()
