@@ -19,13 +19,14 @@ def create_new_user(id, first_name, last_name, username, password, email, phone_
     Creates a new instance of User and a user authentication token
     """
     #Create a new user
+    
     new_user = User.objects.create_user(
         username=username,
         email=email,
         password=password
         )
     
-    #Populate the user data table 
+    #Populate the user data table
     userdata = UserData.objects.create(
         first_name=first_name, 
         last_name=last_name, 
@@ -46,17 +47,21 @@ def create_new_user(id, first_name, last_name, username, password, email, phone_
         print(f'Confirmation code: {random_user_code}')
         
         #Send token to email
-        sender = 'waichigovick@gmail.com'
+        sender = 'wpoolb@gmail.com'
         email_body= """
         <html>
             <head>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
                 <title> World Bank car pooling authentication </title>
             </head>
             <body>
-                <h2> Hi %s </h2>
-                <p>Your confirmation key is %s </p>
-                
-                <h5>Enjoy the pooling Experience </h5>
+                <div class="jumbotron">
+                    <h2 style="font-size:20px"> Hi <span style="font-weight:bold"> %s </span> </h2>
+                    <p class="mt-3">Your confirmation key is <span style="color:blue"> %s </span> </p>
+                </div>
+                <footer>
+                    <h5>Enjoy the pooling Experience</h5>
+                </footer>
             </body>
         </html>
         

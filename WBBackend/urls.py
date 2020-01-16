@@ -1,3 +1,6 @@
+from django.conf import settings
+from django.conf.urls.static import static
+
 from django.urls import re_path, include
 from . import views
 # FCM NOTIFICATIONS
@@ -14,7 +17,8 @@ from .views import (
     TripDetailApiView,
     TripApiView,
     TripChatApiView,
-    DemandViewSet
+    DemandViewSet,
+    OffersList,
 )
 
 #Documentation
@@ -42,13 +46,14 @@ router.register('trip_detail', TripDetailApiView)
 router.register('trip', TripApiView)
 router.register(r'devices', FCMDeviceAuthorizedViewSet)
 router.register('chat',TripChatApiView)
+router.register('offers', OffersList)
 router.register('demand',DemandViewSet)
+
 urlpatterns = [
-    re_path(r'^', include(router.urls)),
+    re_path(r'^register/', views.UserDataView.as_view()),
     re_path(r'^auth/', include('rest_auth.urls')),
-    re_path(r'offers/', views.OffersList.as_view()),
-    re_path(r'user_auth/', views.UserDataView.as_view()),
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^', include(router.urls)),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
