@@ -18,7 +18,7 @@ django-js-asset==1.2.2
 django-kronos==1.0
 django-rest-auth==0.9.5
 django-uuidfield==0.5.0
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 django-cors-headers==3.2.1
 drf-yasg==1.17.0
 fcm-django==0.3.2
