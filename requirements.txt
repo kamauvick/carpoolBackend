@@ -1,7 +1,7 @@
 amqp==1.4.9
 anyjson==0.3.3
 billiard==3.3.0.23
-celery==3.1.26.post2
+celery==5.2.2
 certifi==2019.11.28
 chardet==3.0.4
 coreapi==2.3.3
