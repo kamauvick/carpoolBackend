@@ -1,7 +1,7 @@
 import pandas as pd
 import ./components/form.js
 
-tripdetails = ["Photofile", "Team Leader", "Date", "Time", "Expected Out Time", "Call Out Time", "No. of Trip Members", "Return Time", "Trip Status", "Additional Info"]
+tripdetails = ["Client", "Origin", "Destination", "Date", "Time", "Expected Out Time", "Call Out Time", "No. of Trip Members", "Return Time", "Trip Status", "Additional Info"]
 
 # write new trip data into table
 def write_new():
