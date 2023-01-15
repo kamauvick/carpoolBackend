@@ -15,6 +15,7 @@ ExtraMinPerLocation = {
   "CSUSB": [],
   "UCSC":[],
   "Museum of Modern Art": [],
+
   }
 ExtraMin = []
 now = datetime.now()
