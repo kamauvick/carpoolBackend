@@ -30,3 +30,5 @@ def read(index):
 
   # store in one dataframe
   df_read = pd.DataFrame(data=df.loc([index], columns=tripdetails)
+
+def
