@@ -31,4 +31,5 @@ def read(index):
   # store in one dataframe
   df_read = pd.DataFrame(data=df.loc([index], columns=tripdetails)
 
-def
+def write(index):
+    return df.to_csv("test.txt", columns=[index], header=False, index=False)
