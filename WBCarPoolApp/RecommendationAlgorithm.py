@@ -2,6 +2,7 @@ import googlemaps
 from datetime import datetime
 
 
+
 ApiKey = ""
 # Place Key here 
 
@@ -34,6 +35,33 @@ for locations in PassengerLocations:
                                       traffic_model = "best_guess",
                                       departure_time = now)
 # Calls first query asking for duration of the drivers orginal dirve 
+=======
+ApiKey=""
+  # Place Key here 
+
+gmaps = googlemaps.Client(key=ApiKey)
+DriverStart = input("Where are you starting from: ") 
+PassengerLocations = ["Fresno", "UCSB","CSUSB","UCSC","Museum of Modern Art"]
+Destination = input("Where are you going: ")
+ExtraMinPerLocation = {
+  "Fresno": [] ,
+  "UCSB": [],
+  "CSUSB": [],
+  "UCSC":[],
+  "Museum of Modern Art": [],
+
+  }
+ExtraMin = []
+now = datetime.now()
+
+for locations in PassengerLocations:
+    OrignalTime = gmaps.directions( DriverStart,
+                                      Destination,
+                                      optimize_waypoints = True,
+                                      mode = "driving",
+                                      traffic_model = "best_guess",
+                                      departure_time = now)
+
     Firstleg = gmaps.directions(    DriverStart,
                                       locations,
                                       optimize_waypoints = True,
@@ -47,23 +75,31 @@ for locations in PassengerLocations:
                                       mode = "driving",
                                       traffic_model = "best_guess",
                                       departure_time = now)
+
 # Second two queries are from drivers start to riders start and riders start to the destination 
+=======
 
     OrignalTime = OrignalTime[0]['legs'][0]['duration']['value']
     FirstLegDuration = Firstleg[0]['legs'][0]['duration']['value']
     SecondLegDuration = Secondleg[0]['legs'][0]['duration']['value']
+
 # Parses Data from API 
+=======
 
     TotalDuration = FirstLegDuration + SecondLegDuration 
     ExtraTime = TotalDuration - OrignalTime 
 
     ExtraMin.append(ExtraTime)
     ExtraMinPerLocation[locations].append(ExtraTime)
+
     # Finds how much added time the ride will take and adds it to the list and dic from before 
+=======
+
 
 
 sorted(ExtraMinPerLocation)
 ExtraMin.sort()
+
 # Sorts so the shortest time will come first
 
 BestOption = str(next(iter(ExtraMinPerLocation)))
@@ -74,3 +110,11 @@ minutes = round(ExtraMin[0] / 60,2)
 
 print(f"There is someone you can pick up at {BestOption}. And it will only add {minutes} minutes to your route!")
 # Prints results
+=======
+
+BestOption = str(next(iter(ExtraMinPerLocation)))
+
+minutes = round(ExtraMin[0] / 60,2)
+
+print(f"There is someone you can pick up at {BestOption}. And it will only add {minutes} minutes to your route!")
+
