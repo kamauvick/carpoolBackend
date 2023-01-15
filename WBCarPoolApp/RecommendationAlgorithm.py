@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 ApiKey=""
-# Place Key here 
+  # Place Key here 
 
 gmaps = googlemaps.Client(key=ApiKey)
 DriverStart = input("Where are you starting from: ") 
@@ -15,32 +15,32 @@ ExtraMinPerLocation = {
   "CSUSB": [],
   "UCSC":[],
   "Museum of Modern Art": [],
-}
 
+  }
 ExtraMin = []
 now = datetime.now()
 
 for locations in PassengerLocations:
     OrignalTime = gmaps.directions( DriverStart,
-                                    Destination,
-                                     optimize_waypoints = True,
-                                     mode = "driving",
-                                     traffic_model = "best_guess",
-                                     departure_time = now)
+                                      Destination,
+                                      optimize_waypoints = True,
+                                      mode = "driving",
+                                      traffic_model = "best_guess",
+                                      departure_time = now)
 
     Firstleg = gmaps.directions(    DriverStart,
-                                    locations,
-                                     optimize_waypoints = True,
-                                     mode = "driving",
-                                     traffic_model = "best_guess",
-                                     departure_time = now)
+                                      locations,
+                                      optimize_waypoints = True,
+                                      mode = "driving",
+                                      traffic_model = "best_guess",
+                                      departure_time = now)
 
     Secondleg = gmaps.directions(    locations,
-                                     Destination,
-                                     optimize_waypoints = True,
-                                     mode = "driving",
-                                     traffic_model = "best_guess",
-                                     departure_time = now)
+                                      Destination,
+                                      optimize_waypoints = True,
+                                      mode = "driving",
+                                      traffic_model = "best_guess",
+                                      departure_time = now)
 
     OrignalTime = OrignalTime[0]['legs'][0]['duration']['value']
     FirstLegDuration = Firstleg[0]['legs'][0]['duration']['value']
