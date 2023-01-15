@@ -1,4 +1,4 @@
-Name,NumberOfMembers,Selfie,OutTime,CallOutTime,AdditionalInfo,ReturnTime,Status,BluetoothID
-test,test,test,test,test,test,,,test
-hisdf
-sdfsd
+first_name,last_name,username,password,email,rating,starting_location
+test,test,test,test,test,test,test
+test,test,test,test,,test,,test
+test,,test,test,test,test,test
