@@ -2,37 +2,63 @@ import googlemaps
 from datetime import datetime
 
 
-ApiKey=""
-# Place Key here 
-
-DriverStart = "UC Irvine"
-PassengerStart = "Disneyland"
-Destination = "UC Riverside"
-
+ApiKey = ""
+  # Place Key here 
 
 gmaps = googlemaps.Client(key=ApiKey)
+DriverStart = input("Where are you starting from: ") 
 
-
+PassengerLocations = ["Castle Park", "California Citrus State Historic Park","UC Riverside Botanic Gardens","Andulka Park",]
+Destination = input("Where are you going: ")
+ExtraMinPerLocation = {
+  "Castle Park": [] ,
+  "California Citrus State Historic Park": [],
+  "UC Riverside Botanic Gardens": [],
+  "Andulka Park":[],
+  "Riverside Art Museum": [],
+  }
+ExtraMin = []
 now = datetime.now()
-Firstleg = gmaps.directions(        DriverStart,
-                                    PassengerStart,
-                                     optimize_waypoints = True,
-                                     mode = "driving",
-                                     traffic_model = "best_guess",
-                                     departure_time = now)
 
-Secondleg = gmaps.directions(        PassengerStart,
-                                     Destination,
-                                     optimize_waypoints = True,
-                                     mode = "driving",
-                                     traffic_model = "best_guess",
-                                     departure_time = now)
+for locations in PassengerLocations:
+    OrignalTime = gmaps.directions( DriverStart,
+                                      Destination,
+                                      optimize_waypoints = True,
+                                      mode = "driving",
+                                      traffic_model = "best_guess",
+                                      departure_time = now)
+
+    Firstleg = gmaps.directions(    DriverStart,
+                                      locations,
+                                      optimize_waypoints = True,
+                                      mode = "driving",
+                                      traffic_model = "best_guess",
+                                      departure_time = now)
+
+    Secondleg = gmaps.directions(    locations,
+                                      Destination,
+                                      optimize_waypoints = True,
+                                      mode = "driving",
+                                      traffic_model = "best_guess",
+                                      departure_time = now)
+
+    OrignalTime = OrignalTime[0]['legs'][0]['duration']['value']
+    FirstLegDuration = Firstleg[0]['legs'][0]['duration']['value']
+    SecondLegDuration = Secondleg[0]['legs'][0]['duration']['value']
+
+    TotalDuration = FirstLegDuration + SecondLegDuration 
+    ExtraTime = TotalDuration - OrignalTime 
+
+    ExtraMin.append(ExtraTime)
+    ExtraMinPerLocation[locations].append(ExtraTime)
 
 
-FirstLegDuration = Firstleg[0]['legs'][0]['duration']['value']
-SecondLegDuration = Secondleg[0]['legs'][0]['duration']['value']
+sorted(ExtraMinPerLocation)
+ExtraMin.sort()
 
-TotalDuration = FirstLegDuration + SecondLegDuration 
+BestOption = str(next(iter(ExtraMinPerLocation)))
 
-print(TotalDuration)
-#should output to csv rather than printing 
+minutes = round(ExtraMin[0] / 60,2)
+
+print(f"There is someone you can pick up at {BestOption}. And it will only add {minutes} minutes to your route!")
+
