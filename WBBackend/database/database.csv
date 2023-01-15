@@ -1,0 +1,4 @@
+first_name,last_name,username,password,email,rating,starting_location
+test,test,test,test,test,test,test
+test,test,test,test,,test,,test
+test,,test,test,test,test,test
